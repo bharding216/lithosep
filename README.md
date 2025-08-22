@@ -1,3 +1,3 @@
-# Interior Design Website
+# Client static website
 
-This was an interior design website I made for a client.
+This is a website I made for a client.
