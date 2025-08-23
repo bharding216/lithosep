@@ -1,17 +1,26 @@
 @import '@fontsource/fira-mono';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-	--font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+	--font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
 		Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	--font-mono: 'Fira Mono', monospace;
-	--color-bg-0: #ffead7;
-	--color-bg-1: #fff5ec;
-	--color-bg-2: #fffefe;
-	--color-theme-1: #ff3e00;
-	--color-theme-2: #4075a6;
-	--color-text: rgba(0, 0, 0, 0.7);
-	--column-width: 42rem;
-	--column-margin-top: 4rem;
+	--color-primary: #1e3c72;
+	--color-primary-light: #2a5298;
+	--color-accent: #ff6b35;
+	--color-accent-hover: #e55a2b;
+	--color-bg-0: #ffffff;
+	--color-bg-1: #f8f9fa;
+	--color-bg-2: #e9ecef;
+	--color-text: #333333;
+	--color-text-light: #666666;
+	--color-text-muted: #999999;
+	--color-border: #dee2e6;
+	--shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+	--shadow-md: 0 5px 15px rgba(0,0,0,0.1);
+	--shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+	--border-radius: 8px;
+	--transition: all 0.3s ease;
 	font-family: var(--font-body);
 	color: var(--color-text);
 }
@@ -19,19 +28,113 @@
 body {
 	min-height: 100vh;
 	margin: 0;
-	background-color: var(--color-bg-1);
-	background-image: linear-gradient(180deg, var(--color-bg-0) 0%, var(--color-bg-1) 15%, var(--color-bg-2) 50%);
+	background-color: var(--color-bg-0);
+	line-height: 1.6;
+	font-weight: 400;
 }
 
-/* Add this at the end of your existing styles */
+/* Professional Consulting Styles */
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 600;
+	line-height: 1.3;
+	margin-bottom: 1rem;
+	color: var(--color-primary);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+p {
+	margin-bottom: 1rem;
+	color: var(--color-text-light);
+}
+
+/* Links */
+a {
+	color: var(--color-primary);
+	text-decoration: none;
+	transition: var(--transition);
+}
+
+a:hover {
+	color: var(--color-accent);
+}
+
+/* Buttons */
+.btn {
+	display: inline-block;
+	padding: 12px 24px;
+	border-radius: var(--border-radius);
+	font-weight: 500;
+	text-decoration: none;
+	transition: var(--transition);
+	border: none;
+	cursor: pointer;
+}
+
+.btn-primary {
+	background: var(--color-primary);
+	color: white;
+}
+
+.btn-primary:hover {
+	background: var(--color-primary-light);
+	color: white;
+}
+
+.btn-accent {
+	background: var(--color-accent);
+	color: white;
+}
+
+.btn-accent:hover {
+	background: var(--color-accent-hover);
+	color: white;
+}
+
+/* Cards */
+.card {
+	background: white;
+	border-radius: var(--border-radius);
+	box-shadow: var(--shadow-md);
+	padding: 2rem;
+	transition: var(--transition);
+}
+
+.card:hover {
+	transform: translateY(-5px);
+	box-shadow: var(--shadow-lg);
+}
+
+/* Utilities */
+.text-center { text-align: center; }
+.text-primary { color: var(--color-primary); }
+.text-accent { color: var(--color-accent); }
+.text-muted { color: var(--color-text-muted); }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+.mb-5 { margin-bottom: 3rem; }
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+.mt-5 { margin-top: 3rem; }
+
+/* Navigation specific styles */
+.nav-link {
+	pointer-events: auto;
+}
 
 .overlay-open {
 	overflow: hidden;
-}
-
-.nav-link {
-	/* Disable pointer events when overlay is open */
-	pointer-events: auto;
 }
 
 .overlay-open .nav-link {
@@ -44,4 +147,15 @@ body {
 .overlay-open .navbar-toggler,
 .overlay-open .nav-link {
   display: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+	h1 { font-size: 2rem; }
+	h2 { font-size: 1.75rem; }
+	h3 { font-size: 1.25rem; }
+	
+	.card {
+		padding: 1.5rem;
+	}
 }

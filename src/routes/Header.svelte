@@ -7,8 +7,7 @@
 		<div class="container">
 			<!--Logo to the left-->
 			<a class="navbar-brand" href="/">
-				<img alt="Company logo" src="/logo.png" class="d-none d-md-inline-block align-top" width="200" height="200">
-				<img alt="Company logo" src="/logo.png" class="d-md-none d-inline-block align-top" width="100" height="100">
+				<img alt="Company logo" src="/logo.png" class="d-none d-md-inline-block align-top">
 			</a>
 
 			<button class="navbar-toggler" 
@@ -31,6 +30,10 @@
 
 					<li aria-current={$page.url.pathname === '/services' ? 'page' : undefined} class="nav-item">
 						<a href="/services" class="nav-link">Services</a>
+					</li>
+
+					<li aria-current={$page.url.pathname === '/resources' ? 'page' : undefined} class="nav-item">
+						<a href="/resources" class="nav-link">Resources</a>
 					</li>
 
 					<li aria-current={$page.url.pathname === '/inquire' ? 'page' : undefined} class="nav-item">

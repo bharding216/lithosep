@@ -1,192 +1,392 @@
 <svelte:head>
-	<title>Portfolio</title>
-	<meta name="description" content="Our portfolio" />
+	<title>Portfolio - Our Projects</title>
+	<meta name="description" content="Explore our consulting projects across Oil & Gas, Water Processing, Geothermal, and Critical Minerals sectors" />
 </svelte:head>
 
 <script>
+	import S3Image from '$lib/components/S3Image.svelte';
+	let selectedSector = 'oil-gas';
+	
+	let sectors = {
+		'oil-gas': {
+			name: 'Oil & Gas',
+			description: 'Comprehensive solutions for upstream, midstream, and downstream operations',
+			projects: [
+				{ 
+					id: 'offshore-platform', 
+					name: 'Offshore Platform Optimization',
+					description: 'Enhanced production efficiency for deepwater drilling operations',
+					location: 'Gulf of Mexico',
+					year: '2023',
+					scope: 'Process optimization, safety systems, environmental compliance',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/130.JPG'
+				},
+				{ 
+					id: 'pipeline-integrity', 
+					name: 'Pipeline Integrity Management',
+					description: 'Comprehensive pipeline assessment and maintenance program',
+					location: 'Texas',
+					year: '2023',
+					scope: 'Risk assessment, corrosion management, regulatory compliance',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/131.JPG'
+				},
+				{ 
+					id: 'refinery-upgrade', 
+					name: 'Refinery Modernization',
+					description: 'Process improvement and capacity expansion project',
+					location: 'Louisiana',
+					year: '2022',
+					scope: 'Process design, equipment selection, project management',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/132.JPG'
+				}
+			]
+		},
+		'water-processing': {
+			name: 'Water Processing',
+			description: 'Advanced water treatment solutions for industrial and municipal applications',
+			projects: [
+				{ 
+					id: 'municipal-treatment', 
+					name: 'Municipal Water Treatment Plant',
+					description: 'Design and implementation of advanced treatment systems',
+					location: 'Coming Soon',
+					year: 'Future',
+					scope: 'System design, process optimization, regulatory compliance'
+				}
+			]
+		},
+		'geothermal': {
+			name: 'Geothermal',
+			description: 'Sustainable energy solutions leveraging geothermal resources',
+			projects: [
+				{ 
+					id: 'geothermal-plant', 
+					name: 'Geothermal Power Plant',
+					description: 'Renewable energy generation facility development',
+					location: 'Coming Soon',
+					year: 'Future',
+					scope: 'Resource assessment, plant design, environmental impact'
+				}
+			]
+		},
+		'critical-minerals': {
+			name: 'Critical Minerals',
+			description: 'Strategic consulting for lithium and critical minerals processing',
+			projects: [
+				{ 
+					id: 'lithium-extraction', 
+					name: 'Lithium Extraction Facility',
+					description: 'Advanced extraction and processing operations',
+					location: 'Coming Soon',
+					year: 'Future',
+					scope: 'Process design, environmental assessment, feasibility studies'
+				}
+			]
+		}
+	};
+	let expandedProject = null;
 
-	let categories = [
-		{ name: 'greystone', heading: 'Greystone Circle' },
-		{ name: 'hill_country', heading: 'Hill Country Retreat' },
-		{ name: 'jrc', heading: 'Monteola' },
-		{ name: 'office', heading: 'Oil & Gas Office' },
-		{ name: 'mckinney', heading: 'McKinney Homestead' },
-		{ name: 'greens_cliff', heading: 'Greens Cliff'},
-		{ name: 'gatlin_creek', heading: 'Gatlin Creek Dentistry'}
-	];
-  	let selectedImage = null;
-	let selectedCategoryImages = [];
-  	let currentIndex = 0;
-	let currentCategoryHeading = '';
-  
-	function openOverlay(category) {
-		selectedCategoryImages = Array.from({ length: 5 }, (_, imageIndex) => `/${category}/${category}_${imageIndex}.jpg`);
-		currentIndex = 0;
-		selectedImage = selectedCategoryImages[currentIndex];
-		document.body.classList.add('overlay-open');
-		currentCategoryHeading = categories.find(c => c.name === category)?.heading || '';
+	function toggleProject(projectId) {
+		expandedProject = expandedProject === projectId ? null : projectId;
 	}
-
-	function navigate(direction) {
-		currentIndex = (currentIndex + direction + selectedCategoryImages.length) % selectedCategoryImages.length;
-		selectedImage = selectedCategoryImages[currentIndex];
-	}
-
-	function closeOverlay() {
-		selectedImage = null;
-		document.body.classList.remove('overlay-open');
-		currentCategoryHeading = '';
-	}
-
-	const nextImage = () => navigate(1);
-	const prevImage = () => navigate(-1);
-
 </script>
-  
-<div class="grid">
-	{#each categories as category}
-		<button on:click={() => openOverlay(category.name)} class="image-button">
-			<div class="image-container">
-				<img src={`/${category.name}/${category.name}_0.jpg`} alt="Portfolio" class="portfolio-image" />
-				<p class="image-heading">{category.heading}</p>
-			</div>
-		</button>
-	{/each}
+
+<div class="portfolio-container">
+	<div class="portfolio-header">
+		<h1>Our Portfolio</h1>
+		<p>Explore our consulting projects across multiple industry sectors</p>
+	</div>
+
+	<div class="sector-tabs">
+		{#each Object.entries(sectors) as [key, sector]}
+			<button 
+				class="sector-tab {selectedSector === key ? 'active' : ''}"
+				on:click={() => selectedSector = key}
+			>
+				{sector.name}
+			</button>
+		{/each}
+	</div>
+
+	<div class="sector-content">
+		<div class="sector-info">
+			<h2>{sectors[selectedSector].name}</h2>
+			<p class="sector-description">{sectors[selectedSector].description}</p>
+		</div>
+
+		<div class="projects-grid">
+			{#each sectors[selectedSector].projects as project}
+				<div class="project-card">
+					{#if project.image}
+						<div class="project-image">
+							<S3Image 
+								src={project.image}
+								alt={project.name}
+								className="portfolio-project-image"
+							/>
+						</div>
+					{/if}
+					<div class="project-content">
+						<button class="project-header" on:click={() => toggleProject(project.id)}>
+							<h3>{project.name}</h3>
+							<span class="expand-icon {expandedProject === project.id ? 'expanded' : ''}">▼</span>
+						</button>
+						<div class="project-meta">
+							<span class="project-location">{project.location}</span>
+							<span class="project-year">{project.year}</span>
+						</div>
+						<p class="project-description">{project.description}</p>
+					
+						{#if expandedProject === project.id}
+							<div class="project-details">
+								<h4>Project Scope</h4>
+								<p>{project.scope}</p>
+								{#if project.location !== 'Coming Soon'}
+									<div class="project-status">
+										<span class="status-badge completed">Completed</span>
+									</div>
+								{:else}
+									<div class="project-status">
+										<span class="status-badge future">Future Project</span>
+									</div>
+								{/if}
+							</div>
+						{/if}
+					</div>
+				</div>
+			{/each}
+		</div>
+	</div>
 </div>
 
-{#if selectedImage !== null}
-	<div class="overlay">
-		<button on:click={closeOverlay} class="close-button">✕</button>
-		<button on:click={prevImage} class="prev">&#8249;</button>
-		<div class="overlay-content">
-			<img src={selectedImage} alt="Maximized" class="maximized-image" />
-			<p class="overlay-heading">{currentCategoryHeading}</p>
-		</div>
-		<button on:click={nextImage} class="next">&#8250;</button>
-	</div>
-{/if}
-
 <style>
-	.grid {
-	  display: grid;
-	  grid-template-columns: repeat(2, 1fr);
-	  gap: 16px;
+	.portfolio-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 40px 20px;
 	}
 
-	@media screen and (max-width: 767px) {
-		.grid {
-			grid-template-columns: 1fr; /* Single column for small screens */
-		}
+	.portfolio-header {
+		text-align: center;
+		margin-bottom: 50px;
 	}
-  
-	.image-button {
+
+	.portfolio-header h1 {
+		font-size: 3em;
+		color: #1e3c72;
+		margin-bottom: 15px;
+	}
+
+	.portfolio-header p {
+		font-size: 1.2em;
+		color: #666;
+	}
+
+	.sector-tabs {
 		display: flex;
-		align-items: center;
 		justify-content: center;
-		cursor: pointer;
-		border: none;
-		padding: 0;
-		margin: 0;
+		gap: 10px;
+		margin-bottom: 40px;
+		flex-wrap: wrap;
 	}
 
-	.image-container {
+	.sector-tab {
+		padding: 12px 24px;
+		border: 2px solid #1e3c72;
+		background: white;
+		color: #1e3c72;
+		border-radius: 25px;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		font-weight: 500;
+	}
+
+	.sector-tab:hover {
+		background: #f0f4ff;
+	}
+
+	.sector-tab.active {
+		background: #1e3c72;
+		color: white;
+	}
+
+	.sector-content {
+		margin-top: 40px;
+	}
+
+	.sector-info {
+		text-align: center;
+		margin-bottom: 40px;
+	}
+
+	.sector-info h2 {
+		font-size: 2.5em;
+		color: #1e3c72;
+		margin-bottom: 15px;
+	}
+
+	.sector-description {
+		font-size: 1.2em;
+		color: #666;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.projects-grid {
+		display: grid;
+		gap: 30px;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+	}
+
+	.project-card {
+		background: white;
+		border-radius: 10px;
+		box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+		overflow: hidden;
+		transition: transform 0.3s ease;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
+	}
+
+	.project-card:hover {
+		transform: translateY(-5px);
+	}
+
+	.project-image {
 		width: 100%;
-		height: 400px;
+		height: 200px;
 		overflow: hidden;
-		padding-bottom: 30px;
 	}
 
-	.portfolio-image {
-	  width: 100%;
-	  height: 100%;
-	  object-fit: cover;
-	  margin-bottom: 8px;
-	}
-
-	.image-heading {
-		margin-top: 8px;
-		font-size: 14px;
-	}
-  
-
-	.overlay {
-		position: fixed;
-		top: 0;
-		left: 0;
+	:global(.portfolio-project-image) {
 		width: 100%;
 		height: 100%;
-		background: rgba(0, 0, 0, 0.8);
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.project-card:hover :global(.portfolio-project-image) {
+		transform: scale(1.05);
+	}
+
+	.project-content {
+		flex: 1;
 		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 1000;
-		backdrop-filter: blur(10px);
-	}
-  
-	.overlay-content {
-		max-width: 80%;
-		max-height: 80%;
-		background-color: #fff;
-		overflow: hidden;
-		position: relative;
-		border-radius: 8px; 
-		box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		flex-direction: column;
 	}
 
-	.maximized-image {
-	  width: 100%;
-	  height: 100%;
-	  object-fit: contain;
-	}
-
-    .prev, .next {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 60px;
-        cursor: pointer;
-        border: none;
-        background: none;
-        color: rgb(255, 255, 255);
-        outline: black;
-        display: inline-block;
-        background-color: none;
-        padding: 8px;
-    }
-
-    .prev {
-        left: 0;
-    }
-
-    .next {
-        right: 0;
-    }
-
-	.close-button {
-		position: absolute;
-		top: 10px;
-		right: 10px;
-		font-size: 24px;
+	.project-header {
+		padding: 25px;
+		background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+		color: white;
 		cursor: pointer;
-		background: none;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 		border: none;
-		color: white;
+		width: 100%;
+		text-align: left;
 	}
 
-	.overlay-heading {
-		position: absolute;
-		top: 10px;
-		left: 50%;
-		transform: translateX(-50%);
-		font-size: 20px; 
-		color: white;
+	.project-header h3 {
+		margin: 0;
+		font-size: 1.3em;
+	}
+
+	.expand-icon {
+		transition: transform 0.3s ease;
+		font-size: 1.2em;
+	}
+
+	.expand-icon.expanded {
+		transform: rotate(180deg);
+	}
+
+	.project-meta {
+		padding: 15px 25px 0;
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.9em;
+		color: #666;
+	}
+
+	.project-location {
+		font-weight: 500;
+	}
+
+	.project-year {
+		background: #f0f4ff;
+		padding: 4px 8px;
+		border-radius: 12px;
+		color: #1e3c72;
+	}
+
+	.project-description {
+		padding: 15px 25px;
+		color: #333;
+		line-height: 1.6;
+	}
+
+	.project-details {
+		padding: 0 25px 25px;
+		border-top: 1px solid #eee;
+		margin-top: 15px;
+		padding-top: 20px;
+	}
+
+	.project-details h4 {
+		color: #1e3c72;
+		margin-bottom: 10px;
+	}
+
+	.project-details p {
+		color: #666;
+		line-height: 1.6;
+		margin-bottom: 15px;
+	}
+
+	.project-status {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.status-badge {
+		padding: 6px 12px;
+		border-radius: 15px;
+		font-size: 0.8em;
+		font-weight: 500;
+	}
+
+	.status-badge.completed {
+		background: #d4edda;
+		color: #155724;
+	}
+
+	.status-badge.future {
+		background: #fff3cd;
+		color: #856404;
+	}
+
+	@media screen and (max-width: 768px) {
+		.portfolio-header h1 {
+			font-size: 2.5em;
+		}
+
+		.sector-info h2 {
+			font-size: 2em;
+		}
+
+		.projects-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.sector-tabs {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.sector-tab {
+			width: 200px;
+		}
 	}
 </style>
