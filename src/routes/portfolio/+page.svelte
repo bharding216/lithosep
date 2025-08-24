@@ -28,7 +28,7 @@
 					location: 'Texas',
 					year: '2023',
 					scope: 'Risk assessment, corrosion management, regulatory compliance',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/131.JPG'
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/135.JPG'
 				},
 				{ 
 					id: 'refinery-upgrade', 
