@@ -19,7 +19,7 @@
 					location: 'Gulf of Mexico',
 					year: '2023',
 					scope: 'Process optimization, safety systems, environmental compliance',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/130.JPG'
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20170613_125952.jpg'
 				},
 				{ 
 					id: 'pipeline-integrity', 
@@ -28,7 +28,7 @@
 					location: 'Texas',
 					year: '2023',
 					scope: 'Risk assessment, corrosion management, regulatory compliance',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/135.JPG'
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_134510.jpg'
 				},
 				{ 
 					id: 'refinery-upgrade', 
@@ -37,7 +37,25 @@
 					location: 'Louisiana',
 					year: '2022',
 					scope: 'Process design, equipment selection, project management',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/132.JPG'
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180328_094501.jpg'
+				},
+				{ 
+					id: 'drilling-optimization', 
+					name: 'Drilling Operations Enhancement',
+					description: 'Advanced drilling techniques and safety protocols implementation',
+					location: 'North Dakota',
+					year: '2022',
+					scope: 'Drilling optimization, safety systems, cost reduction strategies',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20171014_180648.jpg'
+				},
+				{ 
+					id: 'production-facility', 
+					name: 'Production Facility Development',
+					description: 'Design and construction of new production facilities',
+					location: 'West Texas',
+					year: '2021',
+					scope: 'Facility design, equipment procurement, project execution',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/SAM_3027.JPG'
 				}
 			]
 		},
@@ -49,9 +67,19 @@
 					id: 'municipal-treatment', 
 					name: 'Municipal Water Treatment Plant',
 					description: 'Design and implementation of advanced treatment systems',
-					location: 'Coming Soon',
-					year: 'Future',
-					scope: 'System design, process optimization, regulatory compliance'
+					location: 'Arizona',
+					year: '2023',
+					scope: 'System design, process optimization, regulatory compliance',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180716_132122.jpg'
+				},
+				{ 
+					id: 'industrial-processing', 
+					name: 'Industrial Water Processing Facility',
+					description: 'Advanced water treatment for industrial applications',
+					location: 'California',
+					year: '2022',
+					scope: 'Treatment system design, automation, environmental compliance',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190130_104600.jpg'
 				}
 			]
 		},
@@ -63,9 +91,19 @@
 					id: 'geothermal-plant', 
 					name: 'Geothermal Power Plant',
 					description: 'Renewable energy generation facility development',
-					location: 'Coming Soon',
-					year: 'Future',
-					scope: 'Resource assessment, plant design, environmental impact'
+					location: 'Nevada',
+					year: '2023',
+					scope: 'Resource assessment, plant design, environmental impact',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0454.JPG'
+				},
+				{ 
+					id: 'geothermal-heating', 
+					name: 'Direct Use Geothermal System',
+					description: 'Industrial heating application using geothermal energy',
+					location: 'Wyoming',
+					year: '2022',
+					scope: 'System design, installation, performance optimization',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0496.JPG'
 				}
 			]
 		},
@@ -77,9 +115,19 @@
 					id: 'lithium-extraction', 
 					name: 'Lithium Extraction Facility',
 					description: 'Advanced extraction and processing operations',
-					location: 'Coming Soon',
-					year: 'Future',
-					scope: 'Process design, environmental assessment, feasibility studies'
+					location: 'Chile',
+					year: '2023',
+					scope: 'Process design, environmental assessment, feasibility studies',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/Picture88.jpg'
+				},
+				{ 
+					id: 'mineral-processing', 
+					name: 'Critical Minerals Processing Plant',
+					description: 'Comprehensive mineral processing and purification facility',
+					location: 'Australia',
+					year: '2022',
+					scope: 'Plant design, process optimization, automation systems',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122324.jpg'
 				}
 			]
 		}
@@ -141,7 +189,7 @@
 							<div class="project-details">
 								<h4>Project Scope</h4>
 								<p>{project.scope}</p>
-								{#if project.location !== 'Coming Soon'}
+								{#if project.year !== 'Future'}
 									<div class="project-status">
 										<span class="status-badge completed">Completed</span>
 									</div>

@@ -7,14 +7,19 @@
 	--font-mono: 'Fira Mono', monospace;
 	--color-primary: #1e3c72;
 	--color-primary-light: #2a5298;
-	--color-accent: #ff6b35;
-	--color-accent-hover: #e55a2b;
+	--color-primary-dark: #162d5a;
+	--color-accent: #2196f3;
+	--color-accent-hover: #1976d2;
+	--color-secondary: #4caf50;
+	--color-secondary-hover: #388e3c;
+	--color-warning: #ff9800;
+	--color-warning-hover: #f57c00;
 	--color-bg-0: #ffffff;
-	--color-bg-1: #f8f9fa;
-	--color-bg-2: #e9ecef;
-	--color-text: #333333;
-	--color-text-light: #666666;
-	--color-text-muted: #999999;
+	--color-bg-1: #fafbfc;
+	--color-bg-2: #f5f6f7;
+	--color-text: #212529;
+	--color-text-light: #495057;
+	--color-text-muted: #6c757d;
 	--color-border: #dee2e6;
 	--shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
 	--shadow-md: 0 5px 15px rgba(0,0,0,0.1);
@@ -96,6 +101,26 @@ a:hover {
 	color: white;
 }
 
+.btn-secondary {
+	background: var(--color-secondary);
+	color: white;
+}
+
+.btn-secondary:hover {
+	background: var(--color-secondary-hover);
+	color: white;
+}
+
+.btn-warning {
+	background: var(--color-warning);
+	color: white;
+}
+
+.btn-warning:hover {
+	background: var(--color-warning-hover);
+	color: white;
+}
+
 /* Cards */
 .card {
 	background: white;
@@ -114,6 +139,8 @@ a:hover {
 .text-center { text-align: center; }
 .text-primary { color: var(--color-primary); }
 .text-accent { color: var(--color-accent); }
+.text-secondary { color: var(--color-secondary); }
+.text-warning { color: var(--color-warning); }
 .text-muted { color: var(--color-text-muted); }
 
 .mb-1 { margin-bottom: 0.5rem; }

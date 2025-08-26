@@ -17,10 +17,10 @@
 		<div class="profile-section">
 			<div class="profile-image">
 				<S3Image 
-					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/130.JPG"
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/JorgeManrique-HeadShot2.png"
 					alt="Professional consulting team"
 					className="about-profile-image"
-					placeholder="/Headshot3_IG.jpg"
+					placeholder="/logo.png"
 				/>
 			</div>
 			<div class="profile-info">
@@ -116,6 +116,56 @@
 					<div class="step-number">4</div>
 					<h4>Optimization</h4>
 					<p>Continuous monitoring and improvement of implemented solutions</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="showcase-section">
+			<h2>Project Showcase</h2>
+			<div class="showcase-grid">
+				<div class="showcase-item">
+					<S3Image 
+						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_134728.jpg"
+						alt="Field operations expertise"
+						className="showcase-image"
+					/>
+					<div class="showcase-overlay">
+						<h4>Field Operations</h4>
+						<p>Hands-on field experience across multiple projects</p>
+					</div>
+				</div>
+				<div class="showcase-item">
+					<S3Image 
+						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122106.jpg"
+						alt="Technical consultation"
+						className="showcase-image"
+					/>
+					<div class="showcase-overlay">
+						<h4>Technical Consultation</h4>
+						<p>Expert analysis and problem-solving</p>
+					</div>
+				</div>
+				<div class="showcase-item">
+					<S3Image 
+						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0505.JPG"
+						alt="Project management"
+						className="showcase-image"
+					/>
+					<div class="showcase-overlay">
+						<h4>Project Management</h4>
+						<p>End-to-end project delivery and oversight</p>
+					</div>
+				</div>
+				<div class="showcase-item">
+					<S3Image 
+						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180711_160044.jpg"
+						alt="Industry expertise"
+						className="showcase-image"
+					/>
+					<div class="showcase-overlay">
+						<h4>Industry Expertise</h4>
+						<p>Deep knowledge across multiple sectors</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -300,6 +350,66 @@
 		line-height: 1.6;
 	}
 
+	.showcase-section h2 {
+		text-align: center;
+		color: #1e3c72;
+		font-size: 2.5em;
+		margin-bottom: 40px;
+	}
+
+	.showcase-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 25px;
+	}
+
+	.showcase-item {
+		position: relative;
+		border-radius: 10px;
+		overflow: hidden;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+		transition: transform 0.3s ease;
+	}
+
+	.showcase-item:hover {
+		transform: translateY(-5px);
+	}
+
+	:global(.showcase-image) {
+		width: 100%;
+		height: 250px;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.showcase-item:hover :global(.showcase-image) {
+		transform: scale(1.05);
+	}
+
+	.showcase-overlay {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: linear-gradient(transparent, rgba(0,0,0,0.8));
+		color: white;
+		padding: 30px 20px 20px;
+		text-align: center;
+	}
+
+	.showcase-overlay h4 {
+		font-size: 1.3em;
+		margin-bottom: 8px;
+		color: white;
+	}
+
+	.showcase-overlay p {
+		font-size: 0.9em;
+		opacity: 0.9;
+		margin: 0;
+		color: white;
+	}
+
 	@media screen and (max-width: 768px) {
 		.about-header h1 {
 			font-size: 2.5em;
@@ -319,6 +429,10 @@
 		}
 
 		.approach-steps {
+			grid-template-columns: 1fr;
+		}
+
+		.showcase-grid {
 			grid-template-columns: 1fr;
 		}
 	}

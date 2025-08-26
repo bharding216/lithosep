@@ -23,6 +23,11 @@
 	const urlCache = new Map();
 
 	async function fetchPresignedUrl() {
+		// Only fetch in browser environment
+		if (typeof window === 'undefined') {
+			return;
+		}
+
 		if (!src) {
 			hasError = true;
 			isLoading = false;

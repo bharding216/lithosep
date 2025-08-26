@@ -1,3 +1,7 @@
+<script>
+	import S3Image from '$lib/components/S3Image.svelte';
+</script>
+
 <svelte:head>
 	<title>Services - Consulting Solutions & Expertise</title>
 	<meta name="description" content="Comprehensive consulting services for Oil & Gas, Water Processing, Geothermal, and Critical Minerals industries" />
@@ -22,6 +26,13 @@
 
 	<div class="services-grid">
 		<div class="service-category">
+			<div class="category-image">
+				<S3Image 
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/RIG 1.jpg"
+					alt="Oil & Gas drilling rig"
+					className="category-hero-image"
+				/>
+			</div>
 			<div class="category-header">
 				<h3>Oil & Gas Consulting</h3>
 				<div class="category-icon">⚡</div>
@@ -47,6 +58,13 @@
 		</div>
 
 		<div class="service-category">
+			<div class="category-image">
+				<S3Image 
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180716_132122.jpg"
+					alt="Water processing facility"
+					className="category-hero-image"
+				/>
+			</div>
 			<div class="category-header">
 				<h3>Water Processing</h3>
 				<div class="category-icon">💧</div>
@@ -72,6 +90,13 @@
 		</div>
 
 		<div class="service-category">
+			<div class="category-image">
+				<S3Image 
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0454.JPG"
+					alt="Geothermal energy facility"
+					className="category-hero-image"
+				/>
+			</div>
 			<div class="category-header">
 				<h3>Geothermal Energy</h3>
 				<div class="category-icon">🌋</div>
@@ -97,6 +122,13 @@
 		</div>
 
 		<div class="service-category">
+			<div class="category-image">
+				<S3Image 
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/Picture88.jpg"
+					alt="Critical minerals processing"
+					className="category-hero-image"
+				/>
+			</div>
 			<div class="category-header">
 				<h3>Critical Minerals</h3>
 				<div class="category-icon">💎</div>
@@ -220,6 +252,22 @@
 		transition: transform 0.3s ease;
 	}
 
+	.category-image {
+		height: 200px;
+		overflow: hidden;
+	}
+
+	:global(.category-hero-image) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.service-category:hover :global(.category-hero-image) {
+		transform: scale(1.05);
+	}
+
 	.service-category:hover {
 		transform: translateY(-5px);
 	}
@@ -333,7 +381,7 @@
 
 	.cta-button {
 		display: inline-block;
-		background: #ff6b35;
+		background: var(--color-warning);
 		color: white;
 		padding: 15px 30px;
 		text-decoration: none;
@@ -344,7 +392,7 @@
 	}
 
 	.cta-button:hover {
-		background: #e55a2b;
+		background: var(--color-warning-hover);
 		transform: translateY(-2px);
 		color: white;
 		text-decoration: none;

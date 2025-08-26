@@ -1,8 +1,8 @@
 <script>
     import { page } from '$app/stores';
 
-    const linkedinLink = 'https://www.linkedin.com/company/professional-consulting';
-    const emailLink = 'mailto:info@consultingfirm.com';
+    const linkedinLink = 'https://www.linkedin.com/company/lithosep';
+    const emailLink = 'mailto:jorge@lithosep.net';
 
     let currentYear = new Date().getFullYear();
 </script>
@@ -94,10 +94,11 @@
   .contact-info p {
     margin-bottom: 8px;
     opacity: 0.9;
+    color: rgba(255,255,255,0.9);
   }
 
   .contact-info strong {
-    color: #ff6b35;
+    color: var(--color-warning);
   }
 
   .footer-links {
@@ -117,7 +118,7 @@
   }
 
   .footer-links a:hover {
-    color: #ff6b35;
+    color: var(--color-warning);
   }
 
   .social-links {
@@ -133,7 +134,7 @@
   }
 
   .social-link:hover {
-    color: #ff6b35;
+    color: var(--color-warning);
   }
 
   .footer-bottom {
@@ -145,6 +146,7 @@
   .footer-bottom-content p {
     margin-bottom: 5px;
     opacity: 0.8;
+    color: rgba(255,255,255,0.8);
   }
 
   .disclaimer {

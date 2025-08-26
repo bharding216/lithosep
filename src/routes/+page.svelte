@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Professional Consulting Services - Oil & Gas Expertise</title>
+	<title>Lithos E&P - Oil & Gas Expertise</title>
 	<meta name="description" content="Expert consulting services for Oil & Gas, Water Processing, Geothermal, Lithium, and Critical Minerals Materials" />
 </svelte:head>
 
@@ -25,7 +25,7 @@
 <section class="hero-image-section">
 	<div class="hero-image-container">
 		<S3Image 
-			src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/130.JPG"
+			src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122059.jpg"
 			alt="Professional consulting project"
 			className="hero-image"
 		/>
@@ -37,21 +37,110 @@
 		<h3 class="section-title">Our Expertise</h3>
 		<div class="services-grid">
 			<div class="service-card">
-				<h4>Oil & Gas</h4>
-				<p>Comprehensive solutions for upstream, midstream, and downstream operations with focus on efficiency and safety.</p>
+				<div class="service-image">
+					<S3Image 
+						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_134510.jpg"
+						alt="Oil & Gas operations"
+						className="service-card-image"
+					/>
+				</div>
+				<div class="service-content">
+					<h4>Oil & Gas</h4>
+					<p>Comprehensive solutions for upstream, midstream, and downstream operations with focus on efficiency and safety.</p>
+				</div>
 			</div>
 			<div class="service-card">
-				<h4>Water Processing</h4>
-				<p>Advanced water treatment and management systems for industrial and municipal applications.</p>
+				<div class="service-image">
+					<S3Image 
+						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_224804.jpg"
+						alt="Water Processing systems"
+						className="service-card-image"
+					/>
+				</div>
+				<div class="service-content">
+					<h4>Water Processing</h4>
+					<p>Advanced water treatment and management systems for industrial and municipal applications.</p>
+				</div>
 			</div>
 			<div class="service-card">
-				<h4>Geothermal</h4>
-				<p>Sustainable energy solutions leveraging geothermal resources for power generation and heating systems.</p>
+				<div class="service-image">
+					<S3Image 
+						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/Gusher.jpg"
+						alt="Geothermal energy"
+						className="service-card-image"
+					/>
+				</div>
+				<div class="service-content">
+					<h4>Geothermal</h4>
+					<p>Sustainable energy solutions leveraging geothermal resources for power generation and heating systems.</p>
+				</div>
 			</div>
 			<div class="service-card">
-				<h4>Critical Minerals</h4>
-				<p>Strategic consulting for lithium extraction and critical minerals processing operations.</p>
+				<div class="service-image">
+					<S3Image 
+						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190130_102947.jpg"
+						alt="Critical minerals processing"
+						className="service-card-image"
+					/>
+				</div>
+				<div class="service-content">
+					<h4>Critical Minerals</h4>
+					<p>Strategic consulting for lithium extraction and critical minerals processing operations.</p>
+				</div>
 			</div>
+		</div>
+	</div>
+</section>
+
+<section class="project-gallery">
+	<div class="container">
+		<h3 class="section-title">Recent Projects</h3>
+		<div class="gallery-grid">
+			<div class="gallery-item">
+				<S3Image 
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20170613_125952.jpg"
+					alt="Field operations project"
+					className="gallery-image"
+				/>
+			</div>
+			<div class="gallery-item">
+				<S3Image 
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180328_094501.jpg"
+					alt="Industrial facility"
+					className="gallery-image"
+				/>
+			</div>
+			<div class="gallery-item">
+				<S3Image 
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0431.JPG"
+					alt="Technical equipment"
+					className="gallery-image"
+				/>
+			</div>
+			<div class="gallery-item">
+				<S3Image 
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/SAM_3027.JPG"
+					alt="Project site"
+					className="gallery-image"
+				/>
+			</div>
+			<div class="gallery-item">
+				<S3Image 
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20181009_115833.jpg"
+					alt="Engineering solution"
+					className="gallery-image"
+				/>
+			</div>
+			<div class="gallery-item">
+				<S3Image 
+					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122103.jpg"
+					alt="Consulting project"
+					className="gallery-image"
+				/>
+			</div>
+		</div>
+		<div class="gallery-cta">
+			<a href="/portfolio" class="cta-button secondary">View Full Portfolio</a>
 		</div>
 	</div>
 </section>
@@ -78,6 +167,7 @@
 		font-weight: bold;
 		margin-bottom: 20px;
 		line-height: 1.2;
+		color: white;
 	}
 
 	.hero-subtitle {
@@ -85,6 +175,7 @@
 		margin-bottom: 30px;
 		opacity: 0.9;
 		font-weight: 300;
+		color: white;
 	}
 
 	.hero-description {
@@ -92,6 +183,7 @@
 		line-height: 1.6;
 		margin-bottom: 40px;
 		opacity: 0.9;
+		color: white;
 	}
 
 	.hero-cta {
@@ -111,12 +203,12 @@
 	}
 
 	.cta-button.primary {
-		background-color: #ff6b35;
+		background-color: var(--color-warning);
 		color: white;
 	}
 
 	.cta-button.primary:hover {
-		background-color: #e55a2b;
+		background-color: var(--color-warning-hover);
 		transform: translateY(-2px);
 	}
 
@@ -175,26 +267,87 @@
 
 	.service-card {
 		background: white;
-		padding: 30px;
 		border-radius: 10px;
 		box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-		text-align: center;
+		overflow: hidden;
 		transition: transform 0.3s ease;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.service-card:hover {
 		transform: translateY(-5px);
 	}
 
-	.service-card h4 {
+	.service-image {
+		height: 200px;
+		overflow: hidden;
+	}
+
+	:global(.service-card-image) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.service-card:hover :global(.service-card-image) {
+		transform: scale(1.05);
+	}
+
+	.service-content {
+		padding: 30px;
+		text-align: center;
+		flex: 1;
+	}
+
+	.service-content h4 {
 		color: #1e3c72;
 		font-size: 1.5em;
 		margin-bottom: 15px;
 	}
 
-	.service-card p {
+	.service-content p {
 		color: #666;
 		line-height: 1.6;
+	}
+
+	.project-gallery {
+		padding: 80px 20px;
+		background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+	}
+
+	.gallery-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 20px;
+		margin-bottom: 40px;
+	}
+
+	.gallery-item {
+		border-radius: 10px;
+		overflow: hidden;
+		box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+		transition: transform 0.3s ease;
+	}
+
+	.gallery-item:hover {
+		transform: translateY(-5px);
+	}
+
+	:global(.gallery-image) {
+		width: 100%;
+		height: 250px;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.gallery-item:hover :global(.gallery-image) {
+		transform: scale(1.05);
+	}
+
+	.gallery-cta {
+		text-align: center;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -220,6 +373,10 @@
 		}
 
 		.services-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.gallery-grid {
 			grid-template-columns: 1fr;
 		}
 	}
