@@ -246,13 +246,13 @@
 	}
 
 	.cta-button.secondary {
-		background-color: transparent;
-		color: white;
+		background-color: white;
+		color: rgb(5, 16, 112);
 		border: 2px solid white;
 	}
 
 	.cta-button.secondary:hover {
-		background-color: white;
+		background-color: rgb(241, 240, 255);
 		color: #1e3c72;
 	}
 

@@ -366,6 +366,7 @@
 	.project-header h3 {
 		margin: 0;
 		font-size: 1.3em;
+		color: white;
 	}
 
 	.expand-icon {
