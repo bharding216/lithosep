@@ -4,7 +4,7 @@
 
 <svelte:head>
 	<title>About - Professional Consulting Profile</title>
-	<meta name="description" content="Learn about our consulting expertise and professional background in Oil & Gas, Water Processing, Geothermal, and Critical Minerals" />
+	<meta name="description" content="Learn about our consulting expertise and professional background in Oil & Gas, CCUS, Geothermal, and Critical Minerals" />
 </svelte:head>
 
 <div class="about-container">
@@ -26,13 +26,10 @@
 			<div class="profile-info">
 				<h2>Professional Excellence</h2>
 				<p class="lead-text">
-					With decades of experience in the energy and industrial sectors, our consulting practice 
-					delivers innovative solutions that drive operational efficiency and sustainable growth.
+					With decades of experience in the Energy and Industrial sectors. With significant "know-how" our consulting practice delivers innovative solutions that drive operational efficiency, profitability and IRR, and sustainable growth.
 				</p>
 				<p>
-					Our expertise spans critical industries including Oil & Gas operations, Water Processing systems, 
-					Geothermal energy development, and Critical Minerals extraction. We combine deep technical 
-					knowledge with practical implementation experience to solve complex engineering challenges.
+					We are adept at transforming strategies into actionable results. Our expertise spans critical industries including Oil & Gas operations, CCUS, Water Processing systems, Geothermal energy development, and Critical Minerals extraction and AI for resource management. We combine deep technical knowledge with practical implementation experience to solve complex engineering challenges, driving growth and operational excellence, while contributing to improve asset operations and financials of producing assets.
 				</p>
 			</div>
 		</div>
@@ -41,7 +38,8 @@
 			<div class="expertise-card">
 				<h3>Technical Expertise</h3>
 				<ul>
-					<li>Process Engineering & Optimization</li>
+					<li>Asset Management & Optimization</li>
+					<li>Operations Management</li>
 					<li>Project Management & Execution</li>
 					<li>Regulatory Compliance & Safety</li>
 					<li>Environmental Impact Assessment</li>
@@ -52,11 +50,11 @@
 			<div class="expertise-card">
 				<h3>Industry Experience</h3>
 				<ul>
-					<li>Upstream, Midstream & Downstream Oil & Gas</li>
-					<li>Industrial Water Treatment Systems</li>
+					<li>Subject Matter Expert in Reservoir, Production and Stimulation Engineering</li>
+					<li>CCSU – CO2 Capture, Sequestration and Utilization</li>
 					<li>Geothermal Energy Development</li>
-					<li>Lithium & Critical Minerals Processing</li>
-					<li>Infrastructure Development</li>
+					<li>Lithium & Critical Minerals Development Roadmap, Technology, Recovery & Processing</li>
+					<li>Mature Assets, Offshore Operations, Deepwater Developments, Conventional & Unconventional Reservoirs</li>
 				</ul>
 			</div>
 
@@ -66,8 +64,8 @@
 					<li>Safety-First Approach</li>
 					<li>Environmental Stewardship</li>
 					<li>Innovation & Efficiency</li>
-					<li>Client-Focused Solutions</li>
-					<li>Continuous Improvement</li>
+					<li>Client-Focused Engineered Solutions</li>
+					<li>"KAIZEN" Continuous Improvement</li>
 				</ul>
 			</div>
 		</div>
@@ -80,16 +78,12 @@
 					<p>Advanced degrees in Engineering and related fields</p>
 				</div>
 				<div class="credential-item">
-					<h4>Certifications</h4>
-					<p>Professional Engineering licenses and industry certifications</p>
-				</div>
-				<div class="credential-item">
 					<h4>Experience</h4>
-					<p>20+ years in energy and industrial consulting</p>
+					<p>35+ years in energy and industrial consulting</p>
 				</div>
 				<div class="credential-item">
 					<h4>Publications</h4>
-					<p>Technical papers and industry publications</p>
+					<p>Technical papers, Engineered AI Applications and Industry publications</p>
 				</div>
 			</div>
 		</div>

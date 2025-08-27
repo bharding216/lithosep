@@ -4,13 +4,13 @@
 
 <svelte:head>
 	<title>Lithos E&P - Oil & Gas Expertise</title>
-	<meta name="description" content="Expert consulting services for Oil & Gas, Water Processing, Geothermal, Lithium, and Critical Minerals Materials" />
+	<meta name="description" content="Expert consulting services for Oil & Gas, CCUS, Geothermal, Lithium, and Critical Minerals Materials" />
 </svelte:head>
 
 <section class="hero-section">
 	<div class="hero-content">
 		<h1 class="hero-title">Expert Consulting Solutions</h1>
-		<h2 class="hero-subtitle">Oil & Gas • Water Processing • Geothermal • Critical Minerals</h2>
+		<h2 class="hero-subtitle">Oil & Gas • CCUS • Geothermal • Critical Minerals</h2>
 		<p class="hero-description">
 			Delivering comprehensive consulting services with deep industry expertise and innovative solutions 
 			for complex engineering challenges across multiple sectors.
@@ -53,13 +53,13 @@
 				<div class="service-image">
 					<S3Image 
 						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_224804.jpg"
-						alt="Water Processing systems"
+						alt="CCUS systems"
 						className="service-card-image"
 					/>
 				</div>
 				<div class="service-content">
-					<h4>Water Processing</h4>
-					<p>Advanced water treatment and management systems for industrial and municipal applications.</p>
+					<h4>CCUS</h4>
+					<p>Advanced carbon capture and storage systems for industrial and municipal applications.</p>
 				</div>
 			</div>
 			<div class="service-card">

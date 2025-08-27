@@ -4,7 +4,7 @@
 
 <svelte:head>
 	<title>Services - Consulting Solutions & Expertise</title>
-	<meta name="description" content="Comprehensive consulting services for Oil & Gas, Water Processing, Geothermal, and Critical Minerals industries" />
+	<meta name="description" content="Comprehensive consulting services for Oil & Gas, CCUS, Geothermal, and Critical Minerals industries" />
 </svelte:head>
 
 <div class="services-container">
@@ -61,12 +61,12 @@
 			<div class="category-image">
 				<S3Image 
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180716_132122.jpg"
-					alt="Water processing facility"
+					alt="CCUS facility"
 					className="category-hero-image"
 				/>
 			</div>
 			<div class="category-header">
-				<h3>Water Processing</h3>
+				<h3>CCUS</h3>
 				<div class="category-icon">💧</div>
 			</div>
 			<div class="service-list">

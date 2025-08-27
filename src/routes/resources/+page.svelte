@@ -21,7 +21,7 @@
 				type: "Research Paper",
 				date: "2023",
 				description: "Investigation of innovative water treatment technologies with focus on sustainability and cost-effectiveness for industrial processes.",
-				tags: ["Water Processing", "Sustainability", "Industrial"],
+				tags: ["CCUS", "Sustainability", "Industrial"],
 				status: "Published"
 			},
 			{
@@ -55,7 +55,7 @@
 				type: "Calculation Tool",
 				date: "2023",
 				description: "Optimization tool for water treatment processes, including chemical dosing calculations and efficiency analysis.",
-				tags: ["Water Processing", "Optimization", "Efficiency"],
+				tags: ["CCUS", "Optimization", "Efficiency"],
 				status: "Available"
 			},
 			{

@@ -1,6 +1,6 @@
 <svelte:head>
 	<title>Portfolio - Our Projects</title>
-	<meta name="description" content="Explore our consulting projects across Oil & Gas, Water Processing, Geothermal, and Critical Minerals sectors" />
+	<meta name="description" content="Explore our consulting projects across Oil & Gas, CCUS, Geothermal, and Critical Minerals sectors" />
 </svelte:head>
 
 <script>
@@ -13,54 +13,81 @@
 			description: 'Comprehensive solutions for upstream, midstream, and downstream operations',
 			projects: [
 				{ 
-					id: 'offshore-platform', 
-					name: 'Offshore Platform Optimization',
-					description: 'Enhanced production efficiency for deepwater drilling operations',
+					id: 'asset-management', 
+					name: 'Asset Management',
+					description: 'Our strategy is to close the GAP between the current production and the potential performance given by the operational and technical limits.',
 					location: 'Gulf of Mexico',
 					year: '2023',
-					scope: 'Process optimization, safety systems, environmental compliance',
+					scope: 'Asset optimization, production enhancement, operational excellence',
 					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20170613_125952.jpg'
 				},
 				{ 
-					id: 'pipeline-integrity', 
-					name: 'Pipeline Integrity Management',
-					description: 'Comprehensive pipeline assessment and maintenance program',
+					id: 'horizontal-wells', 
+					name: 'Horizontal Wells',
+					description: 'Reservoir & Production Performance from Multi-stage Fractured Horizontal Well',
 					location: 'Texas',
 					year: '2023',
-					scope: 'Risk assessment, corrosion management, regulatory compliance',
+					scope: 'Multi-stage fracturing, production optimization, reservoir performance',
 					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_134510.jpg'
 				},
 				{ 
-					id: 'refinery-upgrade', 
-					name: 'Refinery Modernization',
-					description: 'Process improvement and capacity expansion project',
+					id: 'resource-assessment', 
+					name: 'Resource Assessment / Reserves Evaluation',
+					description: 'Petroleum Reserves and Financial Evaluation. Strategy for Development, Drainage Area, EUR and Recovery Factors',
 					location: 'Louisiana',
 					year: '2022',
-					scope: 'Process design, equipment selection, project management',
+					scope: 'Reserves evaluation, financial modeling, development strategy',
 					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180328_094501.jpg'
 				},
 				{ 
-					id: 'drilling-optimization', 
-					name: 'Drilling Operations Enhancement',
-					description: 'Advanced drilling techniques and safety protocols implementation',
+					id: 'reservoir-completions', 
+					name: 'Reservoir Completions',
+					description: 'Specialized reservoir completion design and optimization for enhanced production performance',
 					location: 'North Dakota',
 					year: '2022',
-					scope: 'Drilling optimization, safety systems, cost reduction strategies',
+					scope: 'Completion design, perforation optimization, production enhancement',
 					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20171014_180648.jpg'
 				},
 				{ 
-					id: 'production-facility', 
-					name: 'Production Facility Development',
-					description: 'Design and construction of new production facilities',
+					id: 'mature-assets', 
+					name: 'Mature Assets',
+					description: 'Optimization and rejuvenation strategies for mature oil and gas assets to extend field life and enhance recovery',
 					location: 'West Texas',
 					year: '2021',
-					scope: 'Facility design, equipment procurement, project execution',
+					scope: 'Asset revitalization, enhanced recovery, field optimization',
 					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/SAM_3027.JPG'
+				},
+				{ 
+					id: 'conventional-developments', 
+					name: 'Conventional Developments',
+					description: 'Traditional oil and gas development projects with proven reservoir engineering and production techniques',
+					location: 'Various',
+					year: '2023',
+					scope: 'Conventional drilling, reservoir management, production optimization',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20170613_125952.jpg'
+				},
+				{ 
+					id: 'offshore', 
+					name: 'Offshore',
+					description: 'Comprehensive offshore oil and gas development solutions including platform design and subsea systems',
+					location: 'Various Offshore Locations',
+					year: '2023',
+					scope: 'Offshore platform design, subsea engineering, marine operations',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_134510.jpg'
+				},
+				{ 
+					id: 'unconventional-reservoirs', 
+					name: 'Unconventional Reservoirs',
+					description: 'Specialized solutions for unconventional reservoir development including shale gas, tight oil, and coalbed methane',
+					location: 'Various',
+					year: '2023',
+					scope: 'Unconventional drilling, hydraulic fracturing, reservoir characterization',
+					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20171014_180648.jpg'
 				}
 			]
 		},
 		'water-processing': {
-			name: 'Water Processing',
+			name: 'CCUS',
 			description: 'Advanced water treatment solutions for industrial and municipal applications',
 			projects: [
 				{ 
@@ -74,7 +101,7 @@
 				},
 				{ 
 					id: 'industrial-processing', 
-					name: 'Industrial Water Processing Facility',
+					name: 'Industrial CCUS Facility',
 					description: 'Advanced water treatment for industrial applications',
 					location: 'California',
 					year: '2022',

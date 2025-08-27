@@ -24,7 +24,7 @@
                 <h4>Services</h4>
                 <ul class="footer-links">
                     <li><a href="/portfolio">Oil & Gas Consulting</a></li>
-                    <li><a href="/portfolio">Water Processing</a></li>
+                    <li><a href="/portfolio">CCUS</a></li>
                     <li><a href="/portfolio">Geothermal Energy</a></li>
                     <li><a href="/portfolio">Critical Minerals</a></li>
                 </ul>
