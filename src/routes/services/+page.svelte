@@ -31,11 +31,13 @@
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/RIG 1.jpg"
 					alt="Oil & Gas drilling rig"
 					className="category-hero-image"
+					aspectRatio="16/9"
+					objectFit="cover"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 				/>
 			</div>
 			<div class="category-header">
 				<h3>Oil & Gas Consulting</h3>
-				<div class="category-icon">⚡</div>
 			</div>
 			<div class="service-list">
 				<div class="service-item">
@@ -63,11 +65,13 @@
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180716_132122.jpg"
 					alt="CCUS facility"
 					className="category-hero-image"
+					aspectRatio="16/9"
+					objectFit="cover"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 				/>
 			</div>
 			<div class="category-header">
 				<h3>CCUS</h3>
-				<div class="category-icon">💧</div>
 			</div>
 			<div class="service-list">
 				<div class="service-item">
@@ -95,11 +99,13 @@
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0454.JPG"
 					alt="Geothermal energy facility"
 					className="category-hero-image"
+					aspectRatio="16/9"
+					objectFit="cover"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 				/>
 			</div>
 			<div class="category-header">
 				<h3>Geothermal Energy</h3>
-				<div class="category-icon">🌋</div>
 			</div>
 			<div class="service-list">
 				<div class="service-item">
@@ -127,11 +133,13 @@
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/Picture88.jpg"
 					alt="Critical minerals processing"
 					className="category-hero-image"
+					aspectRatio="16/9"
+					objectFit="cover"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 				/>
 			</div>
 			<div class="category-header">
 				<h3>Critical Minerals</h3>
-				<div class="category-icon">💎</div>
 			</div>
 			<div class="service-list">
 				<div class="service-item">
@@ -253,14 +261,11 @@
 	}
 
 	.category-image {
-		height: 200px;
 		overflow: hidden;
 	}
 
 	:global(.category-hero-image) {
 		width: 100%;
-		height: 100%;
-		object-fit: cover;
 		transition: transform 0.3s ease;
 	}
 
@@ -283,11 +288,7 @@
 	.category-header h3 {
 		margin: 0;
 		font-size: 1.5em;
-	}
-
-	.category-icon {
-		font-size: 2em;
-		margin-top: 10px;
+		color: white !important;
 	}
 
 	.service-list {
@@ -371,12 +372,17 @@
 	.cta-section h2 {
 		font-size: 2.5em;
 		margin-bottom: 20px;
+		color: white !important;
+		font-weight: 600;
+		text-align: center;
 	}
 
 	.cta-section p {
 		font-size: 1.2em;
 		margin-bottom: 30px;
 		opacity: 0.9;
+		color: white !important;
+		text-align: center;
 	}
 
 	.cta-button {

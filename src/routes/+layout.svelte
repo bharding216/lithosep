@@ -8,7 +8,9 @@
 	<Header />
 
 	<main>
-		<slot />
+		<div class="container">
+			<slot />
+		</div>
 	</main>
 
 	<Footer />

@@ -282,6 +282,8 @@
 		margin: 0 0 15px 0;
 		font-size: 1.3em;
 		line-height: 1.4;
+		color: white !important;
+		font-weight: 600;
 	}
 
 	.resource-meta {
@@ -415,12 +417,15 @@
 	.contact-section h2 {
 		font-size: 2.5em;
 		margin-bottom: 20px;
+		color: white !important;
+		font-weight: 600;
 	}
 
 	.contact-section p {
 		font-size: 1.2em;
 		margin-bottom: 30px;
 		opacity: 0.9;
+		color: white !important;
 	}
 
 	.contact-button {

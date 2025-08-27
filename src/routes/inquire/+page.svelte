@@ -1,13 +1,14 @@
 <svelte:head>
-	<title>Inquire</title>
-	<meta name="description" content="Contact us" />
+	<title>Contact Us - Professional Consulting Services</title>
+	<meta name="description" content="Get in touch with our consulting experts for Oil & Gas, CCUS, Geothermal, and Critical Minerals projects" />
 </svelte:head>
 
 
 <script>
     import { onMount } from 'svelte';
 
-    let siteKey = '6Lf85lkpAAAAAGIBlyA9VIZjMKLR7EMlXmV30w-v';
+    // TODO: Replace with actual reCAPTCHA site key
+    let siteKey = 'YOUR_RECAPTCHA_SITE_KEY_HERE';
 
     onMount(async () => {
         const script = document.createElement('script');
@@ -25,11 +26,8 @@
     let formData = {
         name: '',
         email: '',
-        message: '',
         phone: '',
-        city: '',
-        projectType: '',
-        projectBudget: '',
+        message: '',
         'g-recaptcha-response': '',
     };
 
@@ -49,13 +47,11 @@
         let name = form.get('name');
         let email = form.get('email');
         let phone = form.get('phone');
-        let city = form.get('city');
-        let projectType = form.get('projectType');
-        let projectBudget = form.get('projectBudget');
         let message = form.get('message');
         let recaptchaResponse = grecaptcha.getResponse();
 
-        const response = await fetch('https://2jealshrq3ogi6nfghzshfj5a40kdokp.lambda-url.us-east-2.on.aws/', {
+        // TODO: Replace with your actual AWS Lambda function URL
+        const response = await fetch('YOUR_LAMBDA_FUNCTION_URL_HERE', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -64,9 +60,6 @@
                 name: name,
                 email: email,
                 phone: phone,
-                city: city,
-                projectType: projectType,
-                projectBudget: projectBudget,
                 message: message,
                 'g-recaptcha-response': recaptchaResponse,
             }),
@@ -80,11 +73,8 @@
             formData = {
                 name: '',
                 email: '',
-                message: '',
                 phone: '',
-                city: '',
-                projectType: '',
-                projectBudget: '',
+                message: '',
                 'g-recaptcha-response': '',
             };
             window.scrollTo({
@@ -100,94 +90,233 @@
     }
 </script>
 
-<div>
-    <h1 class="pb-4">Let's Design Your Dream Space Together</h1>
+<div class="contact-container">
+    <div class="contact-header">
+        <h1 class="page-title">Expert Consulting for Your Next Project</h1>
+        <p class="page-subtitle">Contact our team to discuss your Oil & Gas, CCUS, Geothermal, or Critical Minerals consulting needs</p>
+    </div>
 
-    {#if confirmationMessage}
-        <p class="confirmation">{confirmationMessage}</p>
-    {:else if errorMessage}
-        <p class="error-message">{errorMessage}</p>
-    {/if}
+    <div class="contact-form-wrapper">
+        {#if confirmationMessage}
+            <p class="confirmation">{confirmationMessage}</p>
+        {:else if errorMessage}
+            <p class="error-message">{errorMessage}</p>
+        {/if}
 
-    <form on:submit={handleSubmit}>
-        <div class="form-floating mb-3 col-md-12 col-lg-6">
+        <form on:submit={handleSubmit} class="contact-form">
+        <div class="form-floating mb-3 col-12">
             <input type="text" class="form-control" bind:value={formData.name} id="name" name="name"
                 placeholder="Name" autocomplete="off" required>
             <label for="name">Name *</label>
         </div>
 
-        <div class="form-floating mb-3 col-md-12 col-lg-6">
+        <div class="form-floating mb-3 col-12">
             <input type="email" class="form-control" bind:value={formData.email} id="email" name="email"
                 placeholder="Email" autocomplete="off" required>
             <label for="email">Email *</label>
         </div>
 
-        <div class="form-floating mb-3 col-md-12 col-lg-6">
+        <div class="form-floating mb-3 col-12">
             <input type="tel" class="form-control" bind:value={formData.phone} id="phone" name="phone"
                 placeholder="Phone" autocomplete="off" required>
             <label for="phone">Phone *</label>
-            </div>
-        
-            <div class="form-floating mb-3 col-md-12 col-lg-6">
-            <input type="text" class="form-control" bind:value={formData.city} id="city" name="city"
-                placeholder="City" autocomplete="off">
-            <label for="city">City</label>
-            </div>
-
-            <div class="form-floating mb-3 col-md-12 col-lg-6">
-            <label for="projectType" style="display: none;">Project Type</label>
-            <select bind:value={formData.projectType} id="projectType" name="projectType" class="form-select" style="padding-top: 10px;">
-                <option value="" disabled>Select Project Type</option>
-                <option value="new-construction">New Construction</option>
-                <option value="renovation">Renovation</option>
-            </select>
-            </div>
-        
-        <div class="budget-div" style="margin-left: 10px">
-            <p class="mb-2">Project budget:</p>
-            <div class="form-check mb-3 col-md-12">
-                <div class="mb-2">
-                    <input type="radio" class="form-check-input" id="low_budget" name="projectBudget" value="50" bind:group={formData.projectBudget}>
-                    <label class="form-check-label" for="low_budget">&lt;$50k</label>
-                </div>
-                
-                <div class="mb-2">
-                    <input type="radio" class="form-check-input" id="med_budget" name="projectBudget" value="50_to_150" bind:group={formData.projectBudget}>
-                    <label class="form-check-label" for="med_budget">$50k - $150k</label>
-                </div>
-                
-                <div>
-                    <input type="radio" class="form-check-input" id="high_budget" name="projectBudget" value="150" bind:group={formData.projectBudget}>
-                    <label class="form-check-label" for="high_budget">$150k+</label>
-                </div>
-            </div>
         </div>
 
         <div class="form-floating mb-3 col-md-12 col-lg-6">
             <textarea class="form-control" bind:value={formData.message} id="message" name="message"
-                placeholder="Message" style="height: 125px;"></textarea>
+                placeholder="Tell us about your project or inquiry..." style="height: 125px;"></textarea>
             <label for="message">Message</label>
         </div>   
 
         <div class="g-recaptcha mb-3" data-sitekey={siteKey}></div>
     
-        <button type="submit" class="btn btn-secondary">Submit</button>
+        <button type="submit" class="btn btn-primary submit-button" disabled={isLoading}>
+            {#if isLoading}
+                Submitting...
+            {:else}
+                Submit Inquiry
+            {/if}
+        </button>
 
         {#if isLoading}
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         {/if}
-    </form>
+        </form>
+    </div>
 </div>
 
 
 <style>
+    .contact-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    .contact-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .contact-form-wrapper {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--color-border);
+    }
+
+    .contact-form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        align-items: start;
+    }
+
+    .contact-form > .form-floating:nth-child(1),
+    .contact-form > .form-floating:nth-child(2) {
+        grid-column: span 1;
+    }
+
+    .contact-form > .form-floating:nth-child(3) {
+        grid-column: span 1;
+    }
+
+    .contact-form > .form-floating:has(textarea) {
+        grid-column: span 2;
+    }
+
+    .g-recaptcha {
+        grid-column: span 2;
+    }
+
+    .submit-button {
+        grid-column: span 2;
+        justify-self: center;
+    }
+
+    .spinner-border {
+        grid-column: span 2;
+        justify-self: center;
+    }
+
+    .page-title {
+        font-size: 3em;
+        color: var(--color-primary);
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .page-subtitle {
+        font-size: 1.2em;
+        color: var(--color-text-light);
+        text-align: center;
+        margin-bottom: 40px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+    }
+
+
+
+    .submit-button {
+        padding: 15px 40px;
+        font-size: 1.1em;
+        font-weight: 600;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        margin-top: 20px;
+    }
+
+    .submit-button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
     .confirmation {
-        color: rgb(0, 0, 184)
+        color: var(--color-secondary);
+        background: rgba(76, 175, 80, 0.1);
+        padding: 15px;
+        border-radius: var(--border-radius);
+        border-left: 4px solid var(--color-secondary);
+        margin-bottom: 20px;
+        font-weight: 500;
     }
 
     .error-message {
-        color: rgb(199, 0, 0)
+        color: #d32f2f;
+        background: rgba(211, 47, 47, 0.1);
+        padding: 15px;
+        border-radius: var(--border-radius);
+        border-left: 4px solid #d32f2f;
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+
+    .form-floating {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border: 2px solid var(--color-border);
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 0.2rem rgba(30, 60, 114, 0.25);
+    }
+
+    .g-recaptcha {
+        display: flex;
+        justify-content: center;
+        margin: 25px 0;
+    }
+
+    .spinner-border {
+        margin-left: 15px;
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    @media screen and (max-width: 768px) {
+        .contact-container {
+            padding: 20px 15px;
+        }
+
+        .contact-form-wrapper {
+            padding: 25px 20px;
+        }
+
+        .contact-form {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .contact-form > .form-floating,
+        .g-recaptcha,
+        .submit-button,
+        .spinner-border {
+            grid-column: span 1;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+        }
+
+        .page-subtitle {
+            font-size: 1.1em;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px 20px;
+        }
     }
 </style>

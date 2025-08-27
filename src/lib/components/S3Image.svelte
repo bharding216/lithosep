@@ -12,6 +12,9 @@
 	export let placeholder = '/logo.png'; // Fallback image
 	export let width = undefined;
 	export let height = undefined;
+	export let aspectRatio = undefined; // e.g., '16/9', '4/3', '1/1'
+	export let objectFit = 'cover'; // 'cover', 'contain', 'fill', 'none', 'scale-down'
+	export let sizes = undefined; // Responsive sizes attribute
 
 	// State
 	let presignedUrl = '';
@@ -101,11 +104,18 @@
 		hasError = false;
 		fetchPresignedUrl();
 	}
+
+	// Generate dynamic styles based on props
+	$: dynamicStyle = [
+		style,
+		aspectRatio ? `aspect-ratio: ${aspectRatio}` : '',
+		objectFit ? `object-fit: ${objectFit}` : ''
+	].filter(Boolean).join('; ');
 </script>
 
 <div class="s3-image-container" class:loading={isLoading} class:error={hasError}>
 	{#if isLoading}
-		<div class="image-placeholder loading-placeholder" {style}>
+		<div class="image-placeholder loading-placeholder" style={dynamicStyle}>
 			<div class="loading-spinner"></div>
 			<span class="loading-text">Loading image...</span>
 		</div>
@@ -115,10 +125,11 @@
 			src={placeholder}
 			{alt}
 			class="s3-image error-image {className}"
-			{style}
+			style={dynamicStyle}
 			{width}
 			{height}
 			{loading}
+			{sizes}
 		/>
 	{:else}
 		<img
@@ -126,10 +137,11 @@
 			src={presignedUrl}
 			{alt}
 			class="s3-image {className}"
-			{style}
+			style={dynamicStyle}
 			{width}
 			{height}
 			{loading}
+			{sizes}
 			on:load={handleImageLoad}
 			on:error={handleImageError}
 		/>
@@ -146,6 +158,7 @@
 		max-width: 100%;
 		height: auto;
 		transition: opacity 0.3s ease;
+		display: block;
 	}
 
 	.image-placeholder {

@@ -198,6 +198,9 @@
 								src={project.image}
 								alt={project.name}
 								className="portfolio-project-image"
+								aspectRatio="16/10"
+								objectFit="cover"
+								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 							/>
 						</div>
 					{/if}
@@ -329,14 +332,11 @@
 
 	.project-image {
 		width: 100%;
-		height: 200px;
 		overflow: hidden;
 	}
 
 	:global(.portfolio-project-image) {
 		width: 100%;
-		height: 100%;
-		object-fit: cover;
 		transition: transform 0.3s ease;
 	}
 

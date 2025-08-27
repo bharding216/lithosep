@@ -21,6 +21,9 @@
 					alt="Professional consulting team"
 					className="about-profile-image"
 					placeholder="/logo.png"
+					aspectRatio="3/4"
+					objectFit="cover"
+					sizes="(max-width: 768px) 200px, 300px"
 				/>
 			</div>
 			<div class="profile-info">
@@ -122,6 +125,9 @@
 						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_134728.jpg"
 						alt="Field operations expertise"
 						className="showcase-image"
+						aspectRatio="4/3"
+						objectFit="cover"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
 					/>
 					<div class="showcase-overlay">
 						<h4>Field Operations</h4>
@@ -133,6 +139,9 @@
 						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122106.jpg"
 						alt="Technical consultation"
 						className="showcase-image"
+						aspectRatio="4/3"
+						objectFit="cover"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
 					/>
 					<div class="showcase-overlay">
 						<h4>Technical Consultation</h4>
@@ -144,6 +153,9 @@
 						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0505.JPG"
 						alt="Project management"
 						className="showcase-image"
+						aspectRatio="4/3"
+						objectFit="cover"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
 					/>
 					<div class="showcase-overlay">
 						<h4>Project Management</h4>
@@ -155,6 +167,9 @@
 						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180711_160044.jpg"
 						alt="Industry expertise"
 						className="showcase-image"
+						aspectRatio="4/3"
+						objectFit="cover"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
 					/>
 					<div class="showcase-overlay">
 						<h4>Industry Expertise</h4>
@@ -371,8 +386,6 @@
 
 	:global(.showcase-image) {
 		width: 100%;
-		height: 250px;
-		object-fit: cover;
 		transition: transform 0.3s ease;
 	}
 

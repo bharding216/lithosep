@@ -1,7 +1,7 @@
 <script>
     import { page } from '$app/stores';
 
-    const linkedinLink = 'https://www.linkedin.com/company/lithosep';
+    const linkedinLink = 'https://www.linkedin.com/in/jmanrique-2082j/';
     const emailLink = 'mailto:jorge@lithosep.net';
 
     let currentYear = new Date().getFullYear();
@@ -13,8 +13,8 @@
             <div class="footer-section">
                 <h4>Contact Information</h4>
                 <div class="contact-info">
-                    <p><strong>Professional Consulting Services</strong></p>
-                    <p>Email: info@consultingfirm.com</p>
+                    <p><strong>Lithos E&P</strong></p>
+                    <p>Email: jorge@lithosep.net</p>
                     <p>Phone: (555) 123-4567</p>
                     <p>Location: Houston, TX</p>
                 </div>

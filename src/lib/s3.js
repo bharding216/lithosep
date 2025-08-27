@@ -71,8 +71,9 @@ export async function generateMultiplePresignedUrls(bucket, keys, expiresIn = 36
 export function extractImageKey(s3Url) {
 	try {
 		const url = new URL(s3Url);
-		// Remove leading slash from pathname
-		return url.pathname.substring(1);
+		// Remove leading slash from pathname and decode URI components
+		// AWS S3 keys should be properly decoded for API calls
+		return decodeURIComponent(url.pathname.substring(1));
 	} catch (error) {
 		console.error('Error extracting image key:', error);
 		// If URL parsing fails, assume it's already a key

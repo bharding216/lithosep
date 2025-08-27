@@ -28,6 +28,9 @@
 			src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122059.jpg"
 			alt="Professional consulting project"
 			className="hero-image"
+			aspectRatio="21/9"
+			objectFit="cover"
+			sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
 		/>
 	</div>
 </section>
@@ -42,6 +45,9 @@
 						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_134510.jpg"
 						alt="Oil & Gas operations"
 						className="service-card-image"
+						aspectRatio="4/3"
+						objectFit="cover"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
 					/>
 				</div>
 				<div class="service-content">
@@ -55,6 +61,9 @@
 						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_224804.jpg"
 						alt="CCUS systems"
 						className="service-card-image"
+						aspectRatio="4/3"
+						objectFit="cover"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
 					/>
 				</div>
 				<div class="service-content">
@@ -68,6 +77,9 @@
 						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/Gusher.jpg"
 						alt="Geothermal energy"
 						className="service-card-image"
+						aspectRatio="4/3"
+						objectFit="cover"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
 					/>
 				</div>
 				<div class="service-content">
@@ -81,6 +93,9 @@
 						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190130_102947.jpg"
 						alt="Critical minerals processing"
 						className="service-card-image"
+						aspectRatio="4/3"
+						objectFit="cover"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
 					/>
 				</div>
 				<div class="service-content">
@@ -101,6 +116,9 @@
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20170613_125952.jpg"
 					alt="Field operations project"
 					className="gallery-image"
+					aspectRatio="16/10"
+					objectFit="cover"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 				/>
 			</div>
 			<div class="gallery-item">
@@ -108,6 +126,9 @@
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180328_094501.jpg"
 					alt="Industrial facility"
 					className="gallery-image"
+					aspectRatio="16/10"
+					objectFit="cover"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 				/>
 			</div>
 			<div class="gallery-item">
@@ -115,6 +136,9 @@
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0431.JPG"
 					alt="Technical equipment"
 					className="gallery-image"
+					aspectRatio="16/10"
+					objectFit="cover"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 				/>
 			</div>
 			<div class="gallery-item">
@@ -122,6 +146,9 @@
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/SAM_3027.JPG"
 					alt="Project site"
 					className="gallery-image"
+					aspectRatio="16/10"
+					objectFit="cover"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 				/>
 			</div>
 			<div class="gallery-item">
@@ -129,6 +156,9 @@
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20181009_115833.jpg"
 					alt="Engineering solution"
 					className="gallery-image"
+					aspectRatio="16/10"
+					objectFit="cover"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 				/>
 			</div>
 			<div class="gallery-item">
@@ -136,6 +166,9 @@
 					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122103.jpg"
 					alt="Consulting project"
 					className="gallery-image"
+					aspectRatio="16/10"
+					objectFit="cover"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
 				/>
 			</div>
 		</div>
@@ -224,7 +257,7 @@
 	}
 
 	.hero-image-section {
-		padding: 0;
+		padding: 40px 0;
 		background-color: #f8f9fa;
 	}
 
@@ -236,8 +269,6 @@
 
 	:global(.hero-image) {
 		width: 100%;
-		height: 400px;
-		object-fit: cover;
 		border-radius: 15px;
 		box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 	}
@@ -280,14 +311,11 @@
 	}
 
 	.service-image {
-		height: 200px;
 		overflow: hidden;
 	}
 
 	:global(.service-card-image) {
 		width: 100%;
-		height: 100%;
-		object-fit: cover;
 		transition: transform 0.3s ease;
 	}
 
@@ -337,8 +365,6 @@
 
 	:global(.gallery-image) {
 		width: 100%;
-		height: 250px;
-		object-fit: cover;
 		transition: transform 0.3s ease;
 	}
 
@@ -378,6 +404,14 @@
 
 		.gallery-grid {
 			grid-template-columns: 1fr;
+		}
+		
+		:global(.hero-image) {
+			border-radius: 10px;
+		}
+		
+		.hero-image-section {
+			padding: 20px 0;
 		}
 	}
 </style>
