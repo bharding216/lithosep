@@ -6,18 +6,28 @@
 
 <script>
     import { onMount } from 'svelte';
+    import { env } from '$env/dynamic/private';
 
-    // TODO: Replace with actual reCAPTCHA site key
-    let siteKey = 'YOUR_RECAPTCHA_SITE_KEY_HERE';
+    let siteKey = env.RECAPTCHA_SITE_KEY;
+    let lambdaUrl = env.LAMBDA_URL;
 
     onMount(async () => {
+        // Set up global reCAPTCHA callback function
+        window.onSubmit = function(token) {
+            // Get the form and submit it programmatically
+            const form = document.getElementById("inquire-form");
+            if (form) {
+                handleFormSubmission(form, token);
+            }
+        };
+
         const script = document.createElement('script');
-        script.src = 'https://www.google.com/recaptcha/api.js';
+        script.src = 'https://www.google.com/recaptcha/enterprise.js?render=6LfKM7QrAAAAANNwqGYsqKn3omrG6cnKcoMhrReJ';
         script.async = true;
         script.defer = true;
 
         script.addEventListener('load', () => {
-            // Google reCAPTCHA script has loaded
+            // Google reCAPTCHA Enterprise script has loaded
         });
 
         document.body.appendChild(script);
@@ -35,23 +45,22 @@
     let errorMessage = '';
     let isLoading = false;
 
-    async function handleSubmit(event) {
-        event.preventDefault();
 
+
+    async function handleFormSubmission(form, recaptchaToken) {
         if (isLoading) return; // Prevent multiple submissions during loading
 
         isLoading = true;
 
-        const form = new FormData(event.target);
+        const formDataObj = new FormData(form);
 
-        let name = form.get('name');
-        let email = form.get('email');
-        let phone = form.get('phone');
-        let message = form.get('message');
-        let recaptchaResponse = grecaptcha.getResponse();
+        let name = formDataObj.get('name');
+        let email = formDataObj.get('email');
+        let phone = formDataObj.get('phone');
+        let message = formDataObj.get('message');
+        let recaptchaResponse = recaptchaToken;
 
-        // TODO: Replace with your actual AWS Lambda function URL
-        const response = await fetch('YOUR_LAMBDA_FUNCTION_URL_HERE', {
+        const response = await fetch(lambdaUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -70,6 +79,10 @@
             confirmationMessage = responseData.message;
 
             // Reset form fields
+            const formElement = document.getElementById("inquire-form");
+            if (formElement) {
+                formElement.reset();
+            }
             formData = {
                 name: '',
                 email: '',
@@ -88,6 +101,13 @@
 
         isLoading = false;  
     }
+
+    // Handle regular form submit (prevent default behavior since we use reCAPTCHA)
+    async function handleSubmit(event) {
+        event.preventDefault();
+        // Form submission should go through reCAPTCHA button instead
+        return false;
+    }
 </script>
 
 <div class="contact-container">
@@ -103,7 +123,7 @@
             <p class="error-message">{errorMessage}</p>
         {/if}
 
-        <form on:submit={handleSubmit} class="contact-form">
+        <form on:submit={handleSubmit} class="contact-form" id="inquire-form">
         <div class="form-floating mb-3 col-12">
             <input type="text" class="form-control" bind:value={formData.name} id="name" name="name"
                 placeholder="Name" autocomplete="off" required>
@@ -128,9 +148,11 @@
             <label for="message">Message</label>
         </div>   
 
-        <div class="g-recaptcha mb-3" data-sitekey={siteKey}></div>
-    
-        <button type="submit" class="btn btn-primary submit-button" disabled={isLoading}>
+        <button class="g-recaptcha btn btn-primary submit-button"
+                data-sitekey="6LfKM7QrAAAAANNwqGYsqKn3omrG6cnKcoMhrReJ"
+                data-callback="onSubmit"
+                data-action="submit"
+                disabled={isLoading}>
             {#if isLoading}
                 Submitting...
             {:else}
@@ -185,10 +207,6 @@
     }
 
     .contact-form > .form-floating:has(textarea) {
-        grid-column: span 2;
-    }
-
-    .g-recaptcha {
         grid-column: span 2;
     }
 
@@ -273,11 +291,7 @@
         box-shadow: 0 0 0 0.2rem rgba(30, 60, 114, 0.25);
     }
 
-    .g-recaptcha {
-        display: flex;
-        justify-content: center;
-        margin: 25px 0;
-    }
+
 
     .spinner-border {
         margin-left: 15px;
@@ -300,7 +314,6 @@
         }
 
         .contact-form > .form-floating,
-        .g-recaptcha,
         .submit-button,
         .spinner-border {
             grid-column: span 1;
