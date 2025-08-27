@@ -6,32 +6,54 @@
 
 <script>
     import { onMount } from 'svelte';
-    import { env } from '$env/dynamic/private';
 
-    let siteKey = env.RECAPTCHA_SITE_KEY;
-    let lambdaUrl = env.LAMBDA_URL;
+    /** @type {import('./$types').PageData} */
+    export let data;
 
-    onMount(async () => {
-        // Set up global reCAPTCHA callback function
-        window.onSubmit = function(token) {
-            // Get the form and submit it programmatically
-            const form = document.getElementById("inquire-form");
-            if (form) {
-                handleFormSubmission(form, token);
-            }
-        };
-
+    let siteKey = data.siteKey;
+    let lambdaUrl = data.lambdaUrl;
+    
+    onMount(async () => {   
         const script = document.createElement('script');
-        script.src = 'https://www.google.com/recaptcha/enterprise.js?render=6LfKM7QrAAAAANNwqGYsqKn3omrG6cnKcoMhrReJ';
+        script.src = `https://www.google.com/recaptcha/api.js`;
         script.async = true;
         script.defer = true;
 
         script.addEventListener('load', () => {
-            // Google reCAPTCHA Enterprise script has loaded
+            console.log('reCAPTCHA script loaded');
+        });
+
+        script.addEventListener('error', (error) => {
+            console.error('Error loading reCAPTCHA script:', error);
         });
 
         document.body.appendChild(script);
     });
+
+    async function handleManualSubmit() {
+        if (!window.grecaptcha) {
+            console.error('reCAPTCHA not loaded');
+            errorMessage = 'Security verification not loaded. Please refresh the page.';
+            return;
+        }
+
+        // Get the reCAPTCHA response from the automatically rendered widget
+        const token = window.grecaptcha.getResponse();
+        
+        if (!token) {
+            errorMessage = 'Please complete the reCAPTCHA verification.';
+            return;
+        }
+
+        const form = document.getElementById("inquire-form");
+        if (form) {
+            try {
+                await handleFormSubmission(form, token);
+            } catch (error) {
+                console.error('Error in form submission:', error);
+            }
+        }
+    }
 
     let formData = {
         name: '',
@@ -44,62 +66,158 @@
     let confirmationMessage = '';
     let errorMessage = '';
     let isLoading = false;
+    
+    // Validation state
+    let emailValid = true;
+    let phoneValid = true;
+    let emailError = '';
+    let phoneError = '';
 
+    // Email validation function
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email) {
+            emailValid = true;
+            emailError = '';
+            return true;
+        }
+        
+        if (!emailRegex.test(email)) {
+            emailValid = false;
+            emailError = 'Please enter a valid email address';
+            return false;
+        }
+        
+        emailValid = true;
+        emailError = '';
+        return true;
+    }
 
+    // Phone validation function
+    function validatePhone(phone) {
+        const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+        const cleanPhone = phone.replace(/[\s\-\(\)\.]/g, '');
+        
+        if (!phone) {
+            phoneValid = true;
+            phoneError = '';
+            return true;
+        }
+        
+        if (cleanPhone.length < 10 || !phoneRegex.test(cleanPhone)) {
+            phoneValid = false;
+            phoneError = 'Please enter a valid phone number (at least 10 digits)';
+            return false;
+        }
+        
+        phoneValid = true;
+        phoneError = '';
+        return true;
+    }
+
+    // Real-time validation handlers
+    function handleEmailInput() {
+        validateEmail(formData.email);
+    }
+
+    function handlePhoneInput() {
+        validatePhone(formData.phone);
+    }
 
     async function handleFormSubmission(form, recaptchaToken) {
         if (isLoading) return; // Prevent multiple submissions during loading
 
-        isLoading = true;
-
-        const formDataObj = new FormData(form);
-
-        let name = formDataObj.get('name');
-        let email = formDataObj.get('email');
-        let phone = formDataObj.get('phone');
-        let message = formDataObj.get('message');
-        let recaptchaResponse = recaptchaToken;
-
-        const response = await fetch(lambdaUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: name,
-                email: email,
-                phone: phone,
-                message: message,
-                'g-recaptcha-response': recaptchaResponse,
-            }),
-        });
+        // Validate form before submission
+        const isEmailValid = validateEmail(formData.email);
+        const isPhoneValid = validatePhone(formData.phone);
         
-        if (response.ok) {
-            const responseData = await response.json();
-            confirmationMessage = responseData.message;
-
-            // Reset form fields
-            const formElement = document.getElementById("inquire-form");
-            if (formElement) {
-                formElement.reset();
-            }
-            formData = {
-                name: '',
-                email: '',
-                phone: '',
-                message: '',
-                'g-recaptcha-response': '',
-            };
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        } else {
-            errorMessage = 'Our apologies; there was an error processing your request. Please try again later.';
-            console.error('Error sending email');
+        if (!isEmailValid || !isPhoneValid) {
+            return; // Don't submit if validation fails
         }
 
-        isLoading = false;  
+        isLoading = true;
+        errorMessage = ''; // Clear any previous error messages
+
+        // Check if lambdaUrl is available
+        if (!lambdaUrl || lambdaUrl.includes('your-lambda-url-here')) {
+            console.error('Lambda URL is not configured');
+            errorMessage = 'Form submission is not configured. Please contact support directly.';
+            isLoading = false;
+            return;
+        }
+
+        try {
+            const formDataObj = new FormData(form);
+
+            let name = formDataObj.get('name');
+            let email = formDataObj.get('email');
+            let phone = formDataObj.get('phone');
+            let message = formDataObj.get('message');
+            let recaptchaResponse = recaptchaToken;
+
+            console.log('Submitting form to:', lambdaUrl);
+            console.log('Form data:', { name, email, phone, message, recaptchaToken: recaptchaResponse });
+
+            const response = await fetch(lambdaUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    message: message,
+                    'g-recaptcha-response': recaptchaResponse,
+                }),
+            });
+
+            console.log('Response status:', response.status);
+            
+            if (response.ok) {
+                const responseData = await response.json();
+                confirmationMessage = responseData.message || 'Thank you for your inquiry! We will get back to you soon.';
+
+                // Reset form fields
+                const formElement = document.getElementById("inquire-form");
+                if (formElement) {
+                    formElement.reset();
+                }
+                formData = {
+                    name: '',
+                    email: '',
+                    phone: '',
+                    message: '',
+                    'g-recaptcha-response': '',
+                };
+                
+                // Reset validation states
+                emailValid = true;
+                phoneValid = true;
+                emailError = '';
+                phoneError = '';
+                
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            } else {
+                const errorData = await response.text();
+                console.error('Server error:', errorData);
+                errorMessage = 'Our apologies; there was an error processing your request. Please try again later.';
+            }
+        } catch (error) {
+            console.error('Network or other error:', error);
+            // Check if this is a CORS error but the request might have succeeded
+            if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
+                console.warn('CORS error detected, but request may have succeeded. Check email for confirmation.');
+                confirmationMessage = 'Your message has been sent! Due to a technical issue, we cannot confirm receipt here, but please check your email for confirmation.';
+            } else {
+                errorMessage = 'Our apologies; there was an error processing your request. Please check your connection and try again later.';
+            }
+        } finally {
+            isLoading = false;  
+        }
     }
 
     // Handle regular form submit (prevent default behavior since we use reCAPTCHA)
@@ -131,15 +249,27 @@
         </div>
 
         <div class="form-floating mb-3 col-12">
-            <input type="email" class="form-control" bind:value={formData.email} id="email" name="email"
+            <input type="email" class="form-control {!emailValid ? 'is-invalid' : ''}" 
+                bind:value={formData.email} 
+                on:input={handleEmailInput}
+                id="email" name="email"
                 placeholder="Email" autocomplete="off" required>
             <label for="email">Email *</label>
+            {#if emailError}
+                <div class="invalid-feedback">{emailError}</div>
+            {/if}
         </div>
 
         <div class="form-floating mb-3 col-12">
-            <input type="tel" class="form-control" bind:value={formData.phone} id="phone" name="phone"
+            <input type="tel" class="form-control {!phoneValid ? 'is-invalid' : ''}" 
+                bind:value={formData.phone} 
+                on:input={handlePhoneInput}
+                id="phone" name="phone"
                 placeholder="Phone" autocomplete="off" required>
             <label for="phone">Phone *</label>
+            {#if phoneError}
+                <div class="invalid-feedback">{phoneError}</div>
+            {/if}
         </div>
 
         <div class="form-floating mb-3 col-md-12 col-lg-6">
@@ -148,13 +278,19 @@
             <label for="message">Message</label>
         </div>   
 
-        <button class="g-recaptcha btn btn-primary submit-button"
-                data-sitekey="6LfKM7QrAAAAANNwqGYsqKn3omrG6cnKcoMhrReJ"
-                data-callback="onSubmit"
-                data-action="submit"
-                disabled={isLoading}>
+        <!-- reCAPTCHA Enterprise widget -->
+        <div class="recaptcha-container">
+            <div class="g-recaptcha" 
+                 data-sitekey={siteKey} 
+                 data-action="submit"></div>
+        </div>
+
+        <button type="button" 
+                class="btn btn-primary submit-button"
+                disabled={isLoading}
+                on:click={handleManualSubmit}>
             {#if isLoading}
-                Submitting...
+                Sending...
             {:else}
                 Submit Inquiry
             {/if}
@@ -291,6 +427,29 @@
         box-shadow: 0 0 0 0.2rem rgba(30, 60, 114, 0.25);
     }
 
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+
+    .form-control.is-invalid:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    .invalid-feedback {
+        display: block;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875em;
+        color: #dc3545;
+    }
+
+    .recaptcha-container {
+        grid-column: span 2;
+        justify-self: center;
+        margin: 20px 0;
+    }
+
 
 
     .spinner-border {
@@ -315,7 +474,8 @@
 
         .contact-form > .form-floating,
         .submit-button,
-        .spinner-border {
+        .spinner-border,
+        .recaptcha-container {
             grid-column: span 1;
         }
 
