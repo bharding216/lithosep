@@ -4,7 +4,7 @@
 </svelte:head>
 
 <script>
-	import S3Image from '$lib/components/S3Image.svelte';
+	import ImageSlideshow from '$lib/components/ImageSlideshow.svelte';
 	let selectedSector = 'oil-gas';
 	
 	let sectors = {
@@ -16,73 +16,83 @@
 					id: 'asset-management', 
 					name: 'Asset Management',
 					description: 'Our strategy is to close the GAP between the current production and the potential performance given by the operational and technical limits.',
-					location: 'Gulf of Mexico',
-					year: '2023',
 					scope: 'Asset optimization, production enhancement, operational excellence',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20170613_125952.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20170613_125952.jpg',
+					]
 				},
 				{ 
 					id: 'horizontal-wells', 
 					name: 'Horizontal Wells',
 					description: 'Reservoir & Production Performance from Multi-stage Fractured Horizontal Well',
-					location: 'Texas',
-					year: '2023',
 					scope: 'Multi-stage fracturing, production optimization, reservoir performance',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_134510.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/130.JPG',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/graph1.jpg'
+					]
 				},
 				{ 
 					id: 'resource-assessment', 
 					name: 'Resource Assessment / Reserves Evaluation',
 					description: 'Petroleum Reserves and Financial Evaluation. Strategy for Development, Drainage Area, EUR and Recovery Factors',
-					location: 'Louisiana',
-					year: '2022',
 					scope: 'Reserves evaluation, financial modeling, development strategy',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180328_094501.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/graph6.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/graph5.jpg',
+					]
 				},
 				{ 
 					id: 'reservoir-completions', 
 					name: 'Reservoir Completions',
 					description: 'Specialized reservoir completion design and optimization for enhanced production performance',
-					location: 'North Dakota',
-					year: '2022',
 					scope: 'Completion design, perforation optimization, production enhancement',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20171014_180648.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/Picture21.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/image_82b37f36-d387-44dd-a5b2-765df3b3accb20230602_121309.jpg',
+					]
 				},
 				{ 
 					id: 'mature-assets', 
 					name: 'Mature Assets',
 					description: 'Optimization and rejuvenation strategies for mature oil and gas assets to extend field life and enhance recovery',
-					location: 'West Texas',
-					year: '2021',
 					scope: 'Asset revitalization, enhanced recovery, field optimization',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/SAM_3027.JPG'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/RIG 1.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/Picture110.jpg',
+					]
 				},
 				{ 
 					id: 'conventional-developments', 
 					name: 'Conventional Developments',
 					description: 'Traditional oil and gas development projects with proven reservoir engineering and production techniques',
-					location: 'Various',
-					year: '2023',
 					scope: 'Conventional drilling, reservoir management, production optimization',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20170613_125952.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/ANT.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/graph2.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/Picture6.png',
+					]
 				},
 				{ 
 					id: 'offshore', 
 					name: 'Offshore',
 					description: 'Comprehensive offshore oil and gas development solutions including platform design and subsea systems',
-					location: 'Various Offshore Locations',
-					year: '2023',
 					scope: 'Offshore platform design, subsea engineering, marine operations',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_134510.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/station1.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/station2.jpg',
+					]
 				},
 				{ 
 					id: 'unconventional-reservoirs', 
 					name: 'Unconventional Reservoirs',
 					description: 'Specialized solutions for unconventional reservoir development including shale gas, tight oil, and coalbed methane',
-					location: 'Various',
-					year: '2023',
 					scope: 'Unconventional drilling, hydraulic fracturing, reservoir characterization',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20171014_180648.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180328_094501.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/graph4.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/NOMOGTSM.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/graph3.jpg'
+					]
 				}
 			]
 		},
@@ -94,19 +104,23 @@
 					id: 'municipal-treatment', 
 					name: 'Municipal Water Treatment Plant',
 					description: 'Design and implementation of advanced treatment systems',
-					location: 'Arizona',
-					year: '2023',
 					scope: 'System design, process optimization, regulatory compliance',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180716_132122.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180716_132122.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190130_104600.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122324.jpg'
+					]
 				},
 				{ 
 					id: 'industrial-processing', 
 					name: 'Industrial CCUS Facility',
 					description: 'Advanced water treatment for industrial applications',
-					location: 'California',
-					year: '2022',
 					scope: 'Treatment system design, automation, environmental compliance',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190130_104600.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190130_104600.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/Picture88.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180716_132122.jpg'
+					]
 				}
 			]
 		},
@@ -118,19 +132,23 @@
 					id: 'geothermal-plant', 
 					name: 'Geothermal Power Plant',
 					description: 'Renewable energy generation facility development',
-					location: 'Nevada',
-					year: '2023',
 					scope: 'Resource assessment, plant design, environmental impact',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0454.JPG'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0454.JPG',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0496.JPG',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180710_134510.jpg'
+					]
 				},
 				{ 
 					id: 'geothermal-heating', 
 					name: 'Direct Use Geothermal System',
 					description: 'Industrial heating application using geothermal energy',
-					location: 'Wyoming',
-					year: '2022',
 					scope: 'System design, installation, performance optimization',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0496.JPG'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0496.JPG',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0454.JPG',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20170613_125952.jpg'
+					]
 				}
 			]
 		},
@@ -142,19 +160,23 @@
 					id: 'lithium-extraction', 
 					name: 'Lithium Extraction Facility',
 					description: 'Advanced extraction and processing operations',
-					location: 'Chile',
-					year: '2023',
 					scope: 'Process design, environmental assessment, feasibility studies',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/Picture88.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/Picture88.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122324.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190130_104600.jpg'
+					]
 				},
 				{ 
 					id: 'mineral-processing', 
 					name: 'Critical Minerals Processing Plant',
 					description: 'Comprehensive mineral processing and purification facility',
-					location: 'Australia',
-					year: '2022',
 					scope: 'Plant design, process optimization, automation systems',
-					image: 'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122324.jpg'
+					images: [
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122324.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/Picture88.jpg',
+						'https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180716_132122.jpg'
+					]
 				}
 			]
 		}
@@ -192,12 +214,12 @@
 		<div class="projects-grid">
 			{#each sectors[selectedSector].projects as project}
 				<div class="project-card">
-					{#if project.image}
+					{#if project.images && project.images.length > 0}
 						<div class="project-image">
-							<S3Image 
-								src={project.image}
+							<ImageSlideshow 
+								images={project.images}
 								alt={project.name}
-								className="portfolio-project-image"
+								className="portfolio-project-slideshow"
 								aspectRatio="16/10"
 								objectFit="cover"
 								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
@@ -209,25 +231,16 @@
 							<h3>{project.name}</h3>
 							<span class="expand-icon {expandedProject === project.id ? 'expanded' : ''}">▼</span>
 						</button>
-						<div class="project-meta">
-							<span class="project-location">{project.location}</span>
-							<span class="project-year">{project.year}</span>
-						</div>
+
 						<p class="project-description">{project.description}</p>
 					
 						{#if expandedProject === project.id}
 							<div class="project-details">
 								<h4>Project Scope</h4>
 								<p>{project.scope}</p>
-								{#if project.year !== 'Future'}
-									<div class="project-status">
-										<span class="status-badge completed">Completed</span>
-									</div>
-								{:else}
-									<div class="project-status">
-										<span class="status-badge future">Future Project</span>
-									</div>
-								{/if}
+								<div class="project-status">
+									<span class="status-badge completed">Completed</span>
+								</div>
 							</div>
 						{/if}
 					</div>
@@ -335,12 +348,16 @@
 		overflow: hidden;
 	}
 
-	:global(.portfolio-project-image) {
+	:global(.portfolio-project-slideshow) {
+		width: 100%;
+	}
+
+	:global(.portfolio-project-slideshow .slideshow-image) {
 		width: 100%;
 		transition: transform 0.3s ease;
 	}
 
-	.project-card:hover :global(.portfolio-project-image) {
+	.project-card:hover :global(.portfolio-project-slideshow .slideshow-image) {
 		transform: scale(1.05);
 	}
 
@@ -378,24 +395,7 @@
 		transform: rotate(180deg);
 	}
 
-	.project-meta {
-		padding: 15px 25px 0;
-		display: flex;
-		justify-content: space-between;
-		font-size: 0.9em;
-		color: #666;
-	}
 
-	.project-location {
-		font-weight: 500;
-	}
-
-	.project-year {
-		background: #f0f4ff;
-		padding: 4px 8px;
-		border-radius: 12px;
-		color: #1e3c72;
-	}
 
 	.project-description {
 		padding: 15px 25px;
@@ -438,10 +438,7 @@
 		color: #155724;
 	}
 
-	.status-badge.future {
-		background: #fff3cd;
-		color: #856404;
-	}
+
 
 	@media screen and (max-width: 768px) {
 		.portfolio-header h1 {

@@ -55,7 +55,7 @@
 
         <div class="footer-bottom">
             <div class="footer-bottom-content">
-                <p>&copy; {currentYear} Professional Consulting Services. All rights reserved.</p>
+                <p>&copy; {currentYear} Lithos E&P. All rights reserved.</p>
                 <p class="disclaimer">Providing expert consulting solutions across energy and industrial sectors.</p>
             </div>
         </div>
@@ -65,7 +65,7 @@
 
 <style>
   footer {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: linear-gradient(135deg, #020277 0%, #305088 100%);
     color: white;
     margin-top: 60px;
   }

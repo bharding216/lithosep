@@ -8,6 +8,15 @@
 </svelte:head>
 
 <section class="hero-section">
+	<div class="hero-background">
+		<S3Image 
+			src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122059.jpg"
+			alt="Professional consulting project"
+			className="hero-background-image"
+			objectFit="cover"
+			sizes="100vw"
+		/>
+	</div>
 	<div class="hero-content">
 		<h1 class="hero-title">Expert Consulting Solutions</h1>
 		<h2 class="hero-subtitle">Oil & Gas • CCUS • Geothermal • Critical Minerals</h2>
@@ -19,19 +28,6 @@
 			<a href="/portfolio" class="cta-button primary">View Our Work</a>
 			<a href="/inquire" class="cta-button secondary">Get Started</a>
 		</div>
-	</div>
-</section>
-
-<section class="hero-image-section">
-	<div class="hero-image-container">
-		<S3Image 
-			src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122059.jpg"
-			alt="Professional consulting project"
-			className="hero-image"
-			aspectRatio="21/9"
-			objectFit="cover"
-			sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-		/>
 	</div>
 </section>
 
@@ -107,72 +103,11 @@
 	</div>
 </section>
 
-<section class="project-gallery">
+<section class="portfolio-cta-section">
 	<div class="container">
-		<h3 class="section-title">Recent Projects</h3>
-		<div class="gallery-grid">
-			<div class="gallery-item">
-				<S3Image 
-					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20170613_125952.jpg"
-					alt="Field operations project"
-					className="gallery-image"
-					aspectRatio="16/10"
-					objectFit="cover"
-					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-				/>
-			</div>
-			<div class="gallery-item">
-				<S3Image 
-					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180328_094501.jpg"
-					alt="Industrial facility"
-					className="gallery-image"
-					aspectRatio="16/10"
-					objectFit="cover"
-					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-				/>
-			</div>
-			<div class="gallery-item">
-				<S3Image 
-					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/DSCF0431.JPG"
-					alt="Technical equipment"
-					className="gallery-image"
-					aspectRatio="16/10"
-					objectFit="cover"
-					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-				/>
-			</div>
-			<div class="gallery-item">
-				<S3Image 
-					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/SAM_3027.JPG"
-					alt="Project site"
-					className="gallery-image"
-					aspectRatio="16/10"
-					objectFit="cover"
-					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-				/>
-			</div>
-			<div class="gallery-item">
-				<S3Image 
-					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20181009_115833.jpg"
-					alt="Engineering solution"
-					className="gallery-image"
-					aspectRatio="16/10"
-					objectFit="cover"
-					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-				/>
-			</div>
-			<div class="gallery-item">
-				<S3Image 
-					src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190327_122103.jpg"
-					alt="Consulting project"
-					className="gallery-image"
-					aspectRatio="16/10"
-					objectFit="cover"
-					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-				/>
-			</div>
-		</div>
-		<div class="gallery-cta">
+		<div class="portfolio-cta">
+			<h3 class="cta-title">Ready to See Our Work?</h3>
+			<p class="cta-description">Explore our comprehensive portfolio of successful projects across multiple industries.</p>
 			<a href="/portfolio" class="cta-button secondary">View Full Portfolio</a>
 		</div>
 	</div>
@@ -180,17 +115,53 @@
 
 <style>
 	.hero-section {
-		background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+		position: relative;
 		color: white;
 		padding: 80px 20px;
 		text-align: center;
-		min-height: 60vh;
+		min-height: 80vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+	}
+
+	.hero-background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		overflow: hidden;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
+	:global(.hero-background-image) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center center;
+		opacity: 0.7;
+		display: block;
+	}
+
+	.hero-background::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg, rgba(30, 60, 114, 0.4) 0%, rgba(42, 82, 152, 0.4) 100%);
+		z-index: 2;
+	}
+
 	.hero-content {
+		position: relative;
+		z-index: 3;
 		max-width: 800px;
 		margin: 0 auto;
 	}
@@ -236,12 +207,12 @@
 	}
 
 	.cta-button.primary {
-		background-color: var(--color-warning);
+		background-color: var(--color-accent);
 		color: white;
 	}
 
 	.cta-button.primary:hover {
-		background-color: var(--color-warning-hover);
+		background-color: var(--color-accent-hover);
 		transform: translateY(-2px);
 	}
 
@@ -256,22 +227,7 @@
 		color: #1e3c72;
 	}
 
-	.hero-image-section {
-		padding: 40px 0;
-		background-color: #f8f9fa;
-	}
 
-	.hero-image-container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 20px;
-	}
-
-	:global(.hero-image) {
-		width: 100%;
-		border-radius: 15px;
-		box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-	}
 
 	.services-preview {
 		padding: 80px 20px;
@@ -340,40 +296,28 @@
 		line-height: 1.6;
 	}
 
-	.project-gallery {
+	.portfolio-cta-section {
 		padding: 80px 20px;
 		background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 	}
 
-	.gallery-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 20px;
-		margin-bottom: 40px;
-	}
-
-	.gallery-item {
-		border-radius: 10px;
-		overflow: hidden;
-		box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-		transition: transform 0.3s ease;
-	}
-
-	.gallery-item:hover {
-		transform: translateY(-5px);
-	}
-
-	:global(.gallery-image) {
-		width: 100%;
-		transition: transform 0.3s ease;
-	}
-
-	.gallery-item:hover :global(.gallery-image) {
-		transform: scale(1.05);
-	}
-
-	.gallery-cta {
+	.portfolio-cta {
 		text-align: center;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.cta-title {
+		font-size: 2.5em;
+		color: #1e3c72;
+		margin-bottom: 20px;
+	}
+
+	.cta-description {
+		font-size: 1.2em;
+		color: #666;
+		line-height: 1.6;
+		margin-bottom: 30px;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -402,16 +346,12 @@
 			grid-template-columns: 1fr;
 		}
 
-		.gallery-grid {
-			grid-template-columns: 1fr;
+		.cta-title {
+			font-size: 2em;
 		}
-		
-		:global(.hero-image) {
-			border-radius: 10px;
-		}
-		
-		.hero-image-section {
-			padding: 20px 0;
+
+		.cta-description {
+			font-size: 1em;
 		}
 	}
 </style>
