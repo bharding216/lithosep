@@ -22,8 +22,18 @@
 	let hasError = false;
 	let imageElement;
 
-	// Cache for presigned URLs (simple in-memory cache)
+	// Enhanced cache for presigned URLs with better key generation
 	const urlCache = new Map();
+	
+	// Global cache and request batching to share between all S3Image instances
+	if (typeof window !== 'undefined') {
+		if (!window.__s3ImageCache) {
+			window.__s3ImageCache = new Map();
+		}
+		if (!window.__s3PendingRequests) {
+			window.__s3PendingRequests = new Map();
+		}
+	}
 
 	async function fetchPresignedUrl() {
 		// Only fetch in browser environment
@@ -37,9 +47,15 @@
 			return;
 		}
 
-		// Check cache first
+		// Check both local and global cache first
 		const cacheKey = `${bucket}:${src}`;
-		const cached = urlCache.get(cacheKey);
+		const globalCache = typeof window !== 'undefined' ? window.__s3ImageCache : new Map();
+		
+		// Check global cache first (shared between all instances)
+		let cached = globalCache.get(cacheKey);
+		if (!cached) {
+			cached = urlCache.get(cacheKey);
+		}
 		
 		if (cached && cached.expires > Date.now()) {
 			presignedUrl = cached.url;
@@ -47,38 +63,67 @@
 			return;
 		}
 
-		try {
-			const response = await fetch('/api/presigned-url', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					imageUrl: src.startsWith('http') ? src : undefined,
-					bucket: src.startsWith('http') ? undefined : bucket,
-					key: src.startsWith('http') ? undefined : src,
-					expiresIn
-				})
-			});
+		// Check if there's already a pending request for this URL
+		const pendingRequests = typeof window !== 'undefined' ? window.__s3PendingRequests : new Map();
+		
+		if (pendingRequests.has(cacheKey)) {
+			try {
+				const data = await pendingRequests.get(cacheKey);
+				if (data.success) {
+					presignedUrl = data.url;
+				} else {
+					hasError = true;
+				}
+				return;
+			} catch (error) {
+				hasError = true;
+				return;
+			}
+		}
 
-			const data = await response.json();
+		// Create and store the promise for this request
+		const requestPromise = fetch('/api/presigned-url', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				imageUrl: src.startsWith('http') ? src : undefined,
+				bucket: src.startsWith('http') ? undefined : bucket,
+				key: src.startsWith('http') ? undefined : src,
+				expiresIn
+			})
+		}).then(response => response.json());
+		
+		pendingRequests.set(cacheKey, requestPromise);
+
+		try {
+			const data = await requestPromise;
 
 			if (data.success) {
 				presignedUrl = data.url;
 				
-				// Cache the URL (expires 5 minutes before actual expiry for safety)
-				urlCache.set(cacheKey, {
+				// Cache the URL in both local and global cache (expires 5 minutes before actual expiry for safety)
+				const cacheEntry = {
 					url: data.url,
 					expires: Date.now() + (expiresIn - 300) * 1000
-				});
+				};
+				
+				urlCache.set(cacheKey, cacheEntry);
+				if (typeof window !== 'undefined' && window.__s3ImageCache) {
+					window.__s3ImageCache.set(cacheKey, cacheEntry);
+				}
 			} else {
-				console.error('Failed to get presigned URL:', data.error);
 				hasError = true;
 			}
 		} catch (error) {
-			console.error('Error fetching presigned URL:', error);
 			hasError = true;
 		} finally {
+			// Clean up pending request
+			if (typeof window !== 'undefined' && window.__s3PendingRequests) {
+				window.__s3PendingRequests.delete(cacheKey);
+			}
+			
 			isLoading = false;
 		}
 	}
@@ -91,7 +136,6 @@
 	function handleImageError() {
 		hasError = true;
 		isLoading = false;
-		console.error('Failed to load image:', presignedUrl);
 	}
 
 	onMount(() => {

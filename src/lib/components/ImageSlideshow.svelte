@@ -7,6 +7,7 @@
 	export let aspectRatio = '16/10';
 	export let objectFit = 'cover';
 	export let sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px';
+	export let loading = 'lazy';
 	
 	let currentIndex = 0;
 	
@@ -33,6 +34,7 @@
 				{aspectRatio}
 				{objectFit}
 				{sizes}
+				{loading}
 			/>
 			
 			{#if images.length > 1}

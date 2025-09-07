@@ -4,8 +4,68 @@
 </svelte:head>
 
 <script>
+	import { onMount } from 'svelte';
 	import ImageSlideshow from '$lib/components/ImageSlideshow.svelte';
+	
 	let selectedSector = 'oil-gas';
+	
+	
+	// Track sector changes
+	function handleSectorChange(newSector) {
+		selectedSector = newSector;
+	}
+	
+	// Track project expansions
+	function toggleProject(projectId) {
+		expandedProject = expandedProject === projectId ? null : projectId;
+	}
+	
+	
+	// Preload images for non-current sectors to improve switching performance
+	async function preloadSectorImages() {
+		const otherSectors = Object.keys(sectors).filter(key => key !== selectedSector);
+		
+		for (const sectorKey of otherSectors) {
+			const sector = sectors[sectorKey];
+			for (const project of sector.projects) {
+				if (project.images && project.images.length > 0) {
+					// Only preload the first image of each project to avoid overwhelming the network
+					const firstImage = project.images[0];
+					try {
+						const response = await fetch('/api/presigned-url', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({
+								imageUrl: firstImage.startsWith('http') ? firstImage : undefined,
+								bucket: firstImage.startsWith('http') ? undefined : 'lithos-ep',
+								key: firstImage.startsWith('http') ? undefined : firstImage,
+								expiresIn: 3600
+							})
+						});
+						
+						const data = await response.json();
+						if (data.success && typeof window !== 'undefined' && window.__s3ImageCache) {
+							const cacheKey = `lithos-ep:${firstImage}`;
+							window.__s3ImageCache.set(cacheKey, {
+								url: data.url,
+								expires: Date.now() + (3600 - 300) * 1000
+							});
+						}
+					} catch (error) {
+						// Silently handle preload failures
+					}
+				}
+			}
+		}
+	}
+	
+	
+	onMount(() => {
+		// Preload images for better performance
+		setTimeout(() => {
+			preloadSectorImages();
+		}, 1000); // Wait 1 second after mount to avoid blocking initial render
+	});
 	
 	let sectors = {
 		'oil-gas': {
@@ -182,10 +242,6 @@
 		}
 	};
 	let expandedProject = null;
-
-	function toggleProject(projectId) {
-		expandedProject = expandedProject === projectId ? null : projectId;
-	}
 </script>
 
 <div class="portfolio-container">
@@ -198,7 +254,7 @@
 		{#each Object.entries(sectors) as [key, sector]}
 			<button 
 				class="sector-tab {selectedSector === key ? 'active' : ''}"
-				on:click={() => selectedSector = key}
+				on:click={() => handleSectorChange(key)}
 			>
 				{sector.name}
 			</button>
@@ -213,7 +269,10 @@
 
 		<div class="projects-grid">
 			{#each sectors[selectedSector].projects as project, index}
-				<div class="project-card">
+				<div 
+					class="project-card"
+					role="article"
+				>
 					{#if project.images && project.images.length > 0}
 						<div class="project-image">
 							<ImageSlideshow 
@@ -223,6 +282,7 @@
 								aspectRatio="16/10"
 								objectFit="cover"
 								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+								loading={index < 3 ? 'eager' : 'lazy'}
 							/>
 						</div>
 					{/if}
@@ -334,13 +394,20 @@
 		border-radius: 10px;
 		box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 		overflow: hidden;
-		transition: transform 0.3s ease;
+		transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 		display: flex;
 		flex-direction: column;
+		/* Performance optimizations */
+		will-change: transform, box-shadow;
+		backface-visibility: hidden;
+		transform-style: preserve-3d;
+		/* Prepare for GPU acceleration */
+		transform: translateZ(0);
 	}
 
 	.project-card:hover {
-		transform: translateY(-5px);
+		transform: translate3d(0, -5px, 0);
+		box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 	}
 
 	.project-image {
@@ -354,11 +421,18 @@
 
 	:global(.portfolio-project-slideshow .slideshow-image) {
 		width: 100%;
-		transition: transform 0.3s ease;
+		transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		/* Performance optimizations for hover zoom */
+		will-change: transform;
+		backface-visibility: hidden;
+		transform-style: preserve-3d;
+		/* Prepare for GPU acceleration */
+		transform: translateZ(0);
 	}
 
 	.project-card:hover :global(.portfolio-project-slideshow .slideshow-image) {
-		transform: scale(1.05);
+		/* Use 3D transform for hardware acceleration */
+		transform: scale3d(1.05, 1.05, 1) translateZ(0);
 	}
 
 	.project-content {
