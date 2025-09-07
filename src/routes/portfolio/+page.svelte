@@ -212,7 +212,7 @@
 		</div>
 
 		<div class="projects-grid">
-			{#each sectors[selectedSector].projects as project}
+			{#each sectors[selectedSector].projects as project, index}
 				<div class="project-card">
 					{#if project.images && project.images.length > 0}
 						<div class="project-image">
@@ -234,15 +234,15 @@
 
 						<p class="project-description">{project.description}</p>
 					
-						{#if expandedProject === project.id}
-							<div class="project-details">
-								<h4>Project Scope</h4>
-								<p>{project.scope}</p>
-								<div class="project-status">
-									<span class="status-badge completed">Completed</span>
-								</div>
+					{#if expandedProject === project.id}
+						<div class="project-details">
+							<h4>Project Scope</h4>
+							<p>{project.scope}</p>
+							<div class="project-status">
+								<span class="status-badge completed">Completed</span>
 							</div>
-						{/if}
+						</div>
+					{/if}
 					</div>
 				</div>
 			{/each}

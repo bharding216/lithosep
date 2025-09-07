@@ -1,7 +1,8 @@
+import { json } from '@sveltejs/kit';
 import { listS3Objects } from '$lib/s3.js';
 
-/** @type {import('./$types').PageServerLoad} */
-export async function load() {
+/** @type {import('./$types').RequestHandler} */
+export async function GET() {
 	try {
 		const bucket = 'lithos-ep';
 		
@@ -15,23 +16,20 @@ export async function load() {
 		journalArticles.sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified));
 		papers.sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified));
 
-		return {
-			publications: {
+		return json({
+			success: true,
+			data: {
 				journals: journalArticles,
 				papers: papers
 			}
-		};
+		});
 
 	} catch (error) {
-		console.error('Error loading publications:', error);
+		console.error('Publications API error:', error);
 		
-		// Return empty data if there's an error, so the page still loads
-		return {
-			publications: {
-				journals: [],
-				papers: []
-			},
-			error: error.message
-		};
+		return json({
+			success: false,
+			error: error.message || 'Failed to fetch publications'
+		}, { status: 500 });
 	}
 }

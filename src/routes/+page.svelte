@@ -86,7 +86,7 @@
 			<div class="service-card">
 				<div class="service-image">
 					<S3Image 
-						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20190130_102947.jpg"
+						src="https://lithos-ep.s3.us-east-2.amazonaws.com/images/20180328_094501.jpg"
 						alt="Critical minerals processing"
 						className="service-card-image"
 						aspectRatio="4/3"

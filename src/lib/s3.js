@@ -1,4 +1,4 @@
-import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, GetObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { env } from '$env/dynamic/private';
 
@@ -95,4 +95,60 @@ export function extractBucketName(s3Url) {
 		console.error('Error extracting bucket name:', error);
 		return 'lithos-ep'; // Default bucket name based on your example
 	}
+}
+
+/**
+ * List objects in an S3 bucket with optional prefix
+ * @param {string} bucket - S3 bucket name
+ * @param {string} prefix - Optional prefix to filter objects
+ * @returns {Promise<Array>} Array of S3 objects
+ */
+export async function listS3Objects(bucket, prefix = '') {
+	try {
+		const command = new ListObjectsV2Command({
+			Bucket: bucket,
+			Prefix: prefix,
+		});
+
+		const response = await s3Client.send(command);
+		
+		// Filter out folders (objects ending with /) and return file objects only
+		const objects = (response.Contents || [])
+			.filter(obj => !obj.Key.endsWith('/'))
+			.map(obj => ({
+				key: obj.Key,
+				lastModified: obj.LastModified,
+				size: obj.Size,
+				fileName: obj.Key.split('/').pop(),
+				// Extract clean title from filename for journal articles
+				title: extractTitleFromFilename(obj.Key.split('/').pop())
+			}));
+
+		return objects;
+	} catch (error) {
+		console.error('Error listing S3 objects:', error);
+		throw new Error(`Failed to list S3 objects: ${error.message}`);
+	}
+}
+
+/**
+ * Extract a clean title from filename (mainly for journal articles)
+ * @param {string} filename - The filename
+ * @returns {string} Clean title
+ */
+function extractTitleFromFilename(filename) {
+	// Remove .pdf extension
+	let title = filename.replace(/\.pdf$/i, '');
+	
+	// For journal articles, clean up common patterns
+	if (title.includes(' - ')) {
+		// Handle patterns like "Hart's Oil and Gas - Today's Production Challenges - Oct.05"
+		const parts = title.split(' - ');
+		if (parts.length >= 2) {
+			// Take the main title part (usually the second part)
+			title = parts.slice(1).join(' - ');
+		}
+	}
+	
+	return title;
 }
