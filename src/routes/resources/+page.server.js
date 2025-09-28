@@ -5,20 +5,23 @@ export async function load() {
 	try {
 		const bucket = 'lithos-ep';
 		
-		// Fetch journal articles and papers in parallel
-		const [journalArticles, papers] = await Promise.all([
+		// Fetch journal articles, technical papers, and strategy briefs in parallel
+		const [journalArticles, papers, strategyBriefs] = await Promise.all([
 			listS3Objects(bucket, 'publications/journal/'),
-			listS3Objects(bucket, 'publications/papers/')
+			listS3Objects(bucket, 'technical_papers/'),
+			listS3Objects(bucket, 'strategy_briefs/')
 		]);
 
 		// Sort by last modified date (newest first)
 		journalArticles.sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified));
 		papers.sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified));
+		strategyBriefs.sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified));
 
 		return {
 			publications: {
 				journals: journalArticles,
-				papers: papers
+				papers: papers,
+				strategyBriefs: strategyBriefs
 			}
 		};
 
@@ -29,7 +32,8 @@ export async function load() {
 		return {
 			publications: {
 				journals: [],
-				papers: []
+				papers: [],
+				strategyBriefs: []
 			},
 			error: error.message
 		};

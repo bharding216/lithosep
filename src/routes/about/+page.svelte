@@ -85,8 +85,8 @@
 					<p>35+ years in energy and industrial consulting</p>
 				</div>
 				<div class="credential-item">
-					<h4>Publications</h4>
-					<p>Technical papers, Engineered AI Applications and Industry publications</p>
+					<h4>Strategy Briefs</h4>
+					<p>Technical papers, Engineered AI Programs & Applications and Industry publications</p>
 				</div>
 			</div>
 		</div>
@@ -278,11 +278,19 @@
 		border-bottom: none;
 	}
 
+	.expertise-card li {
+		position: relative;
+		padding-left: 25px;
+	}
+
 	.expertise-card li::before {
-		content: "✓";
+		content: "\f00c";
+		font-family: "Font Awesome 5 Free";
+		font-weight: 900;
 		color: #1e3c72;
-		font-weight: bold;
-		margin-right: 10px;
+		position: absolute;
+		left: 0;
+		top: 0;
 	}
 
 	.credentials-section h2 {

@@ -1,15 +1,45 @@
 <svelte:head>
-	<title>Resources - Publications & Applications</title>
-	<meta name="description" content="Access our technical publications, research papers, and industry applications" />
+	<title>Resources - Publications & Programs & Applications</title>
+	<meta name="description" content="Access our technical publications, research papers, and industry programs & applications" />
 </svelte:head>
 
 <script>
+	import PDFPreview from '$lib/components/PDFPreview.svelte';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	
 	export let data;
 	
-	let selectedCategory = 'publications';
-	let downloadingFiles = new Set();
+	let selectedCategory = 'strategy-briefs';
 	
-	// Function to download a file using presigned URL
+	// Handle URL fragments to set the correct category
+	onMount(() => {
+		const hash = window.location.hash.slice(1); // Remove the # symbol
+		if (hash === 'applications') {
+			selectedCategory = 'applications';
+		} else if (hash === 'strategy-briefs') {
+			selectedCategory = 'strategy-briefs';
+		}
+	});
+	
+	// Also listen for hash changes
+	$: if (typeof window !== 'undefined') {
+		const hash = $page.url.hash.slice(1);
+		if (hash === 'applications') {
+			selectedCategory = 'applications';
+		} else if (hash === 'strategy-briefs') {
+			selectedCategory = 'strategy-briefs';
+		}
+	}
+	let downloadingFiles = new Set();
+	let previewingFiles = new Set();
+	
+	// PDF Preview state
+	let showPreview = false;
+	let previewUrl = '';
+	let previewFileName = '';
+	
+	// Function to download a file using direct S3 URL
 	async function downloadFile(key, fileName) {
 		if (downloadingFiles.has(key)) return;
 		
@@ -17,39 +47,46 @@
 		downloadingFiles = downloadingFiles; // Trigger reactivity
 		
 		try {
-			const response = await fetch('/api/presigned-url', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					bucket: 'lithos-ep',
-					key: key,
-					expiresIn: 300 // 5 minutes
-				})
-			});
+			// Generate direct S3 URL
+			const directUrl = `https://lithos-ep.s3.us-east-2.amazonaws.com/${encodeURIComponent(key)}`;
 			
-			const result = await response.json();
-			
-			if (result.success) {
-				// Create a temporary link and trigger download
-				const link = document.createElement('a');
-				link.href = result.url;
-				link.download = fileName;
-				link.target = '_blank';
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-			} else {
-				console.error('Failed to generate download URL:', result.error);
-				alert('Failed to download file. Please try again.');
-			}
+			// Create a temporary link and trigger download
+			const link = document.createElement('a');
+			link.href = directUrl;
+			link.download = fileName;
+			link.target = '_blank';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
 		} catch (error) {
 			console.error('Download error:', error);
 			alert('Failed to download file. Please try again.');
 		} finally {
 			downloadingFiles.delete(key);
 			downloadingFiles = downloadingFiles; // Trigger reactivity
+		}
+	}
+	
+	// Function to preview a PDF file using direct S3 URL
+	async function previewFile(key, fileName) {
+		if (previewingFiles.has(key)) return;
+		
+		previewingFiles.add(key);
+		previewingFiles = previewingFiles; // Trigger reactivity
+		
+		try {
+			// Generate direct S3 URL for PDF preview
+			const directUrl = `https://lithos-ep.s3.us-east-2.amazonaws.com/${encodeURIComponent(key)}`;
+			
+			previewUrl = directUrl;
+			previewFileName = fileName;
+			showPreview = true;
+		} catch (error) {
+			console.error('Preview error:', error);
+			alert('Failed to load preview. Please try again.');
+		} finally {
+			previewingFiles.delete(key);
+			previewingFiles = previewingFiles; // Trigger reactivity
 		}
 	}
 	
@@ -72,74 +109,64 @@
 		});
 	}
 	
+	// Function to organize strategy briefs by section
+	function organizeStrategyBriefs(strategyBriefs) {
+		const sections = {
+			ccus: [],
+			geothermal: [],
+			cmm: [],
+			hydrogen: []
+		};
+		
+		strategyBriefs.forEach(brief => {
+			const fileName = brief.fileName.toLowerCase();
+			if (fileName.includes('ccus')) {
+				sections.ccus.push(brief);
+			} else if (fileName.includes('geothermal')) {
+				sections.geothermal.push(brief);
+			} else if (fileName.includes('cmm')) {
+				sections.cmm.push(brief);
+			} else if (fileName.includes('hydrogen')) {
+				sections.hydrogen.push(brief);
+			}
+		});
+		
+		return sections;
+	}
+	
+	// Organize strategy briefs by sections
+	$: organizedBriefs = data?.publications?.strategyBriefs ? organizeStrategyBriefs(data.publications.strategyBriefs) : { ccus: [], geothermal: [], cmm: [], hydrogen: [] };
+	
 	const resources = {
-		publications: [
-			{
-				title: "Advanced Oil Recovery Techniques in Deepwater Operations",
-				type: "Technical Paper",
-				date: "2023",
-				description: "Comprehensive analysis of enhanced oil recovery methods for deepwater drilling operations, including case studies and performance metrics.",
-				tags: ["Oil & Gas", "Deepwater", "Recovery"],
-				status: "Published"
-			},
-			{
-				title: "Sustainable Water Treatment Technologies for Industrial Applications",
-				type: "Research Paper",
-				date: "2023",
-				description: "Investigation of innovative water treatment technologies with focus on sustainability and cost-effectiveness for industrial processes.",
-				tags: ["CCUS", "Sustainability", "Industrial"],
-				status: "Published"
-			},
-			{
-				title: "Geothermal Energy Integration in Industrial Processes",
-				type: "Conference Paper",
-				date: "2022",
-				description: "Analysis of geothermal energy integration opportunities in various industrial applications and associated economic benefits.",
-				tags: ["Geothermal", "Industrial", "Energy"],
-				status: "Published"
-			},
-			{
-				title: "Critical Minerals Processing: Environmental and Economic Considerations",
-				type: "Technical Report",
-				date: "2022",
-				description: "Comprehensive review of critical minerals processing technologies with emphasis on environmental impact and economic viability.",
-				tags: ["Critical Minerals", "Environment", "Economics"],
-				status: "Published"
-			}
-		],
-		applications: [
-			{
-				title: "Pipeline Integrity Assessment Tool",
-				type: "Software Application",
-				date: "2023",
-				description: "Advanced software tool for comprehensive pipeline integrity assessment, risk analysis, and maintenance planning.",
-				tags: ["Oil & Gas", "Pipeline", "Assessment"],
-				status: "Available"
-			},
-			{
-				title: "Water Treatment Process Optimizer",
-				type: "Calculation Tool",
-				date: "2023",
-				description: "Optimization tool for water treatment processes, including chemical dosing calculations and efficiency analysis.",
-				tags: ["CCUS", "Optimization", "Efficiency"],
-				status: "Available"
-			},
-			{
-				title: "Geothermal Resource Calculator",
-				type: "Assessment Tool",
-				date: "2022",
-				description: "Resource assessment tool for evaluating geothermal potential and economic feasibility of geothermal projects.",
-				tags: ["Geothermal", "Assessment", "Economics"],
-				status: "Available"
-			},
-			{
-				title: "Critical Minerals Market Analysis Dashboard",
-				type: "Analytics Platform",
-				date: "2022",
-				description: "Real-time market analysis dashboard for critical minerals pricing, supply chain, and demand forecasting.",
-				tags: ["Critical Minerals", "Market Analysis", "Forecasting"],
-				status: "Available"
-			}
+			applications: [
+				{
+					title: "Pipeline Integrity Assessment Tool",
+					type: "Software Application",
+					description: "Advanced software tool for comprehensive pipeline integrity assessment, risk analysis, and maintenance planning.",
+					tags: ["Oil & Gas", "Pipeline", "Assessment"],
+					status: "Available"
+				},
+				{
+					title: "Water Treatment Process Optimizer",
+					type: "Calculation Tool",
+					description: "Optimization tool for water treatment processes, including chemical dosing calculations and efficiency analysis.",
+					tags: ["CCUS", "Optimization", "Efficiency"],
+					status: "Available"
+				},
+				{
+					title: "Geothermal Resource Calculator",
+					type: "Assessment Tool",
+					description: "Resource assessment tool for evaluating geothermal potential and economic feasibility of geothermal projects.",
+					tags: ["Geothermal", "Assessment", "Economics"],
+					status: "Available"
+				},
+				{
+					title: "Critical Minerals Market Analysis Dashboard",
+					type: "Analytics Platform",
+					description: "Real-time market analysis dashboard for critical minerals pricing, supply chain, and demand forecasting.",
+					tags: ["Critical Minerals", "Market Analysis", "Forecasting"],
+					status: "Available"
+				}
 		]
 	};
 </script>
@@ -147,15 +174,15 @@
 <div class="resources-container">
 	<div class="resources-header">
 		<h1>Resources</h1>
-		<p class="header-subtitle">Technical publications and industry applications</p>
+		<p class="header-subtitle">Technical publications and industry programs & applications</p>
 	</div>
 
 	<div class="category-tabs">
 		<button 
-			class="category-tab {selectedCategory === 'publications' ? 'active' : ''}"
-			on:click={() => selectedCategory = 'publications'}
+			class="category-tab {selectedCategory === 'strategy-briefs' ? 'active' : ''}"
+			on:click={() => selectedCategory = 'strategy-briefs'}
 		>
-			Publications
+			Strategy Briefs
 		</button>
 		<button 
 			class="category-tab {selectedCategory === 'journals' ? 'active' : ''}"
@@ -167,53 +194,229 @@
 			class="category-tab {selectedCategory === 'papers' ? 'active' : ''}"
 			on:click={() => selectedCategory = 'papers'}
 		>
-			Technical Papers
+			Technical Publications
 		</button>
-		<button 
-			class="category-tab {selectedCategory === 'applications' ? 'active' : ''}"
-			on:click={() => selectedCategory = 'applications'}
-		>
-			Applications
-		</button>
+			<button
+				class="category-tab {selectedCategory === 'applications' ? 'active' : ''}"
+				on:click={() => selectedCategory = 'applications'}
+			>
+				Programs & Applications
+			</button>
 	</div>
 
 	<div class="category-content">
-		{#if selectedCategory === 'publications'}
+		{#if selectedCategory === 'strategy-briefs'}
 			<div class="section-intro">
-				<h2>Technical Publications</h2>
+				<h2>Strategy Briefs</h2>
 				<p>
-					Our published research and technical papers contribute to industry knowledge and best practices. 
-					These publications reflect our commitment to advancing the field through rigorous research and practical insights.
+					Comprehensive strategy briefs for key technology sectors, providing detailed analysis and deployment strategies 
+					for CCUS, Geothermal, Critical Minerals Management, and Hydrogen technologies.
 				</p>
 			</div>
 			
-			<div class="resources-grid">
-				{#each resources[selectedCategory] as resource}
-					<div class="resource-card">
-						<div class="resource-header">
-							<h3>{resource.title}</h3>
-							<div class="resource-meta">
-								<span class="resource-type">{resource.type}</span>
-								<span class="resource-date">{resource.date}</span>
+			<!-- CCUS Section -->
+			{#if organizedBriefs.ccus.length > 0}
+				<div class="strategy-section">
+					<h3 class="section-title">CCUS (Carbon Capture, Utilization & Storage)</h3>
+					<div class="strategy-briefs-grid">
+						{#each organizedBriefs.ccus as brief}
+							<div class="strategy-brief-card">
+								<div class="brief-header">
+									<div class="brief-icon">
+										<i class="fas fa-file-pdf"></i>
+									</div>
+									<div class="brief-info">
+										<h4>{brief.fileName.replace('.pdf', '')}</h4>
+										<div class="brief-meta">
+											<span class="file-size">{formatFileSize(brief.size)}</span>
+										</div>
+									</div>
+								</div>
+								
+								<div class="brief-actions">
+									<button 
+										class="brief-preview-button"
+										on:click={() => previewFile(brief.key, brief.fileName)}
+										disabled={previewingFiles.has(brief.key)}
+										title="Preview PDF"
+									>
+										{#if previewingFiles.has(brief.key)}
+											<i class="fas fa-spinner fa-spin"></i>
+										{:else}
+											<i class="fas fa-eye"></i>
+										{/if}
+									</button>
+									<button 
+										class="brief-download-button"
+										on:click={() => downloadFile(brief.key, brief.fileName)}
+										disabled={downloadingFiles.has(brief.key)}
+										title="Download PDF"
+									>
+										{#if downloadingFiles.has(brief.key)}
+											<i class="fas fa-spinner fa-spin"></i>
+										{:else}
+											<i class="fas fa-download"></i>
+										{/if}
+									</button>
+								</div>
 							</div>
-						</div>
-						
-						<div class="resource-content">
-							<p class="resource-description">{resource.description}</p>
-							
-							<div class="resource-tags">
-								{#each resource.tags as tag}
-									<span class="tag">{tag}</span>
-								{/each}
-							</div>
-						</div>
-						
-						<div class="resource-footer">
-							<span class="status-badge {resource.status.toLowerCase()}">{resource.status}</span>
-						</div>
+						{/each}
 					</div>
-				{/each}
-			</div>
+				</div>
+			{/if}
+			
+			<!-- Geothermal Section -->
+			{#if organizedBriefs.geothermal.length > 0}
+				<div class="strategy-section">
+					<h3 class="section-title">Geothermal Energy</h3>
+					<div class="strategy-briefs-grid">
+						{#each organizedBriefs.geothermal as brief}
+							<div class="strategy-brief-card">
+								<div class="brief-header">
+									<div class="brief-icon">
+										<i class="fas fa-file-pdf"></i>
+									</div>
+									<div class="brief-info">
+										<h4>{brief.fileName.replace('.pdf', '')}</h4>
+										<div class="brief-meta">
+											<span class="file-size">{formatFileSize(brief.size)}</span>
+										</div>
+									</div>
+								</div>
+								
+								<div class="brief-actions">
+									<button 
+										class="brief-preview-button"
+										on:click={() => previewFile(brief.key, brief.fileName)}
+										disabled={previewingFiles.has(brief.key)}
+										title="Preview PDF"
+									>
+										{#if previewingFiles.has(brief.key)}
+											<i class="fas fa-spinner fa-spin"></i>
+										{:else}
+											<i class="fas fa-eye"></i>
+										{/if}
+									</button>
+									<button 
+										class="brief-download-button"
+										on:click={() => downloadFile(brief.key, brief.fileName)}
+										disabled={downloadingFiles.has(brief.key)}
+										title="Download PDF"
+									>
+										{#if downloadingFiles.has(brief.key)}
+											<i class="fas fa-spinner fa-spin"></i>
+										{:else}
+											<i class="fas fa-download"></i>
+										{/if}
+									</button>
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
+			
+			<!-- CMM (Critical Minerals Management) Section -->
+			{#if organizedBriefs.cmm.length > 0}
+				<div class="strategy-section">
+					<h3 class="section-title">CMM (Critical Minerals Management)</h3>
+					<div class="strategy-briefs-grid">
+						{#each organizedBriefs.cmm as brief}
+							<div class="strategy-brief-card">
+								<div class="brief-header">
+									<div class="brief-icon">
+										<i class="fas fa-file-pdf"></i>
+									</div>
+									<div class="brief-info">
+										<h4>{brief.fileName.replace('.pdf', '')}</h4>
+										<div class="brief-meta">
+											<span class="file-size">{formatFileSize(brief.size)}</span>
+										</div>
+									</div>
+								</div>
+								
+								<div class="brief-actions">
+									<button 
+										class="brief-preview-button"
+										on:click={() => previewFile(brief.key, brief.fileName)}
+										disabled={previewingFiles.has(brief.key)}
+										title="Preview PDF"
+									>
+										{#if previewingFiles.has(brief.key)}
+											<i class="fas fa-spinner fa-spin"></i>
+										{:else}
+											<i class="fas fa-eye"></i>
+										{/if}
+									</button>
+									<button 
+										class="brief-download-button"
+										on:click={() => downloadFile(brief.key, brief.fileName)}
+										disabled={downloadingFiles.has(brief.key)}
+										title="Download PDF"
+									>
+										{#if downloadingFiles.has(brief.key)}
+											<i class="fas fa-spinner fa-spin"></i>
+										{:else}
+											<i class="fas fa-download"></i>
+										{/if}
+									</button>
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
+			
+			<!-- Hydrogen Section -->
+			{#if organizedBriefs.hydrogen.length > 0}
+				<div class="strategy-section">
+					<h3 class="section-title">Hydrogen Technology</h3>
+					<div class="strategy-briefs-grid">
+						{#each organizedBriefs.hydrogen as brief}
+							<div class="strategy-brief-card">
+								<div class="brief-header">
+									<div class="brief-icon">
+										<i class="fas fa-file-pdf"></i>
+									</div>
+									<div class="brief-info">
+										<h4>{brief.fileName.replace('.pdf', '')}</h4>
+										<div class="brief-meta">
+											<span class="file-size">{formatFileSize(brief.size)}</span>
+										</div>
+									</div>
+								</div>
+								
+								<div class="brief-actions">
+									<button 
+										class="brief-preview-button"
+										on:click={() => previewFile(brief.key, brief.fileName)}
+										disabled={previewingFiles.has(brief.key)}
+										title="Preview PDF"
+									>
+										{#if previewingFiles.has(brief.key)}
+											<i class="fas fa-spinner fa-spin"></i>
+										{:else}
+											<i class="fas fa-eye"></i>
+										{/if}
+									</button>
+									<button 
+										class="brief-download-button"
+										on:click={() => downloadFile(brief.key, brief.fileName)}
+										disabled={downloadingFiles.has(brief.key)}
+										title="Download PDF"
+									>
+										{#if downloadingFiles.has(brief.key)}
+											<i class="fas fa-spinner fa-spin"></i>
+										{:else}
+											<i class="fas fa-download"></i>
+										{/if}
+									</button>
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
 			
 		{:else if selectedCategory === 'journals'}
 			<div class="section-intro">
@@ -231,7 +434,6 @@
 							<h3>{journal.title}</h3>
 							<div class="publication-meta">
 								<span class="publication-type">Journal Article</span>
-								<span class="publication-date">{formatDate(journal.lastModified)}</span>
 							</div>
 						</div>
 						
@@ -243,13 +445,30 @@
 						</div>
 						
 						<div class="publication-footer">
-							<button 
-								class="download-button"
-								on:click={() => downloadFile(journal.key, journal.fileName)}
-								disabled={downloadingFiles.has(journal.key)}
-							>
-								{downloadingFiles.has(journal.key) ? 'Downloading...' : 'Download PDF'}
-							</button>
+							<div class="publication-actions">
+								<button 
+									class="preview-button"
+									on:click={() => previewFile(journal.key, journal.fileName)}
+									disabled={previewingFiles.has(journal.key)}
+								>
+									{#if previewingFiles.has(journal.key)}
+										<i class="fas fa-spinner fa-spin"></i> Loading...
+									{:else}
+										<i class="fas fa-eye"></i> Preview
+									{/if}
+								</button>
+								<button 
+									class="download-button"
+									on:click={() => downloadFile(journal.key, journal.fileName)}
+									disabled={downloadingFiles.has(journal.key)}
+								>
+									{#if downloadingFiles.has(journal.key)}
+										<i class="fas fa-spinner fa-spin"></i> Downloading...
+									{:else}
+										<i class="fas fa-download"></i> Download PDF
+									{/if}
+								</button>
+							</div>
 						</div>
 					</div>
 				{/each}
@@ -257,10 +476,11 @@
 			
 		{:else if selectedCategory === 'papers'}
 			<div class="section-intro">
-				<h2>Technical Papers</h2>
+				<h2>Technical Publications</h2>
 				<p>
-					Collection of technical papers and research documents covering various aspects of our engineering expertise.
-					These documents provide detailed insights into our methodologies and technical approaches.
+					Comprehensive collection of technical papers covering hydraulic fracturing, reservoir engineering, 
+					production optimization, and advanced completion techniques. These publications showcase our expertise 
+					in oil & gas engineering and provide detailed insights into proven methodologies and best practices.
 				</p>
 			</div>
 			
@@ -269,39 +489,51 @@
 					<div class="paper-card">
 						<div class="paper-content">
 							<div class="paper-icon">
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-									<path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-									<path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-									<path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-									<path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-								</svg>
+								<i class="fas fa-file-alt"></i>
 							</div>
 							<div class="paper-info">
 								<h4>{paper.fileName.replace('.pdf', '')}</h4>
 								<div class="paper-meta">
 									<span class="file-size">{formatFileSize(paper.size)}</span>
-									<span class="file-date">{formatDate(paper.lastModified)}</span>
 								</div>
 							</div>
 						</div>
 						
-						<button 
-							class="paper-download-button"
-							on:click={() => downloadFile(paper.key, paper.fileName)}
-							disabled={downloadingFiles.has(paper.key)}
-						>
-							{downloadingFiles.has(paper.key) ? '⏳' : '⬇️'}
-						</button>
+						<div class="paper-actions">
+							<button 
+								class="paper-preview-button"
+								on:click={() => previewFile(paper.key, paper.fileName)}
+								disabled={previewingFiles.has(paper.key)}
+								title="Preview PDF"
+							>
+								{#if previewingFiles.has(paper.key)}
+									<i class="fas fa-spinner fa-spin"></i>
+								{:else}
+									<i class="fas fa-eye"></i>
+								{/if}
+							</button>
+							<button 
+								class="paper-download-button"
+								on:click={() => downloadFile(paper.key, paper.fileName)}
+								disabled={downloadingFiles.has(paper.key)}
+								title="Download PDF"
+							>
+								{#if downloadingFiles.has(paper.key)}
+									<i class="fas fa-spinner fa-spin"></i>
+								{:else}
+									<i class="fas fa-download"></i>
+								{/if}
+							</button>
+						</div>
 					</div>
 				{/each}
 			</div>
 			
 		{:else if selectedCategory === 'applications'}
 			<div class="section-intro">
-				<h2>Industry Applications</h2>
+				<h2>Industry Programs & Applications</h2>
 				<p>
-					Practical tools and applications developed to solve real-world engineering challenges. 
+					Practical tools and programs & applications developed to solve real-world engineering challenges. 
 					These resources are designed to enhance operational efficiency and support decision-making processes.
 				</p>
 			</div>
@@ -313,7 +545,6 @@
 							<h3>{resource.title}</h3>
 							<div class="resource-meta">
 								<span class="resource-type">{resource.type}</span>
-								<span class="resource-date">{resource.date}</span>
 							</div>
 						</div>
 						
@@ -364,6 +595,9 @@
 		<a href="/inquire" class="contact-button">Get in Touch</a>
 	</div>
 </div>
+
+<!-- PDF Preview Modal -->
+<PDFPreview bind:isOpen={showPreview} pdfUrl={previewUrl} fileName={previewFileName} />
 
 <style>
 	.resources-container {
@@ -690,8 +924,35 @@
 		padding: 0 20px 20px;
 	}
 
+	.publication-actions {
+		display: flex;
+		gap: 10px;
+	}
+
+	.preview-button {
+		flex: 1;
+		background: #28a745;
+		color: white;
+		border: none;
+		padding: 12px 20px;
+		border-radius: 8px;
+		cursor: pointer;
+		font-size: 0.95em;
+		font-weight: 500;
+		transition: background 0.3s ease;
+	}
+
+	.preview-button:hover:not(:disabled) {
+		background: #218838;
+	}
+
+	.preview-button:disabled {
+		background: #ccc;
+		cursor: not-allowed;
+	}
+
 	.download-button {
-		width: 100%;
+		flex: 1;
 		background: #1e3c72;
 		color: white;
 		border: none;
@@ -748,6 +1009,12 @@
 	.paper-icon {
 		color: #1e3c72;
 		flex-shrink: 0;
+		font-size: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
 	}
 
 	.paper-info {
@@ -773,6 +1040,39 @@
 
 	.file-date {
 		color: #888;
+	}
+
+	.paper-actions {
+		display: flex;
+		gap: 8px;
+		flex-shrink: 0;
+	}
+
+	.paper-preview-button {
+		background: #28a745;
+		color: white;
+		border: none;
+		width: 40px;
+		height: 40px;
+		border-radius: 8px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.2em;
+		transition: all 0.3s ease;
+		flex-shrink: 0;
+	}
+
+	.paper-preview-button:hover:not(:disabled) {
+		background: #218838;
+		transform: scale(1.05);
+	}
+
+	.paper-preview-button:disabled {
+		background: #ccc;
+		cursor: not-allowed;
+		transform: none;
 	}
 
 	.paper-download-button {
@@ -858,5 +1158,156 @@
 		.publication-card {
 			margin-bottom: 20px;
 		}
+		
+		.strategy-section {
+			margin-bottom: 40px;
+		}
+		
+		.strategy-briefs-grid {
+			grid-template-columns: 1fr;
+		}
+		
+		.strategy-brief-card {
+			padding: 15px;
+		}
+	}
+	
+	/* Strategy Briefs Styles */
+	.strategy-section {
+		margin-bottom: 50px;
+	}
+	
+	.section-title {
+		color: #1e3c72;
+		font-size: 1.8em;
+		margin-bottom: 25px;
+		padding-bottom: 10px;
+		border-bottom: 3px solid #1e3c72;
+		display: inline-block;
+	}
+	
+	.strategy-briefs-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: 20px;
+	}
+	
+	.strategy-brief-card {
+		background: white;
+		border: 1px solid #e0e6ed;
+		border-radius: 12px;
+		padding: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		transition: all 0.3s ease;
+		box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+	}
+	
+	.strategy-brief-card:hover {
+		border-color: #1e3c72;
+		box-shadow: 0 6px 20px rgba(30, 60, 114, 0.15);
+		transform: translateY(-2px);
+	}
+	
+	.brief-header {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		flex: 1;
+	}
+	
+	.brief-icon {
+		color: #dc3545;
+		flex-shrink: 0;
+		font-size: 28px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 45px;
+		height: 45px;
+		background: #fff5f5;
+		border-radius: 8px;
+	}
+	
+	.brief-info {
+		flex: 1;
+		min-width: 0;
+	}
+	
+	.brief-info h4 {
+		margin: 0 0 8px 0;
+		font-size: 1.1em;
+		color: #333;
+		font-weight: 600;
+		line-height: 1.3;
+		word-break: break-word;
+	}
+	
+	.brief-meta {
+		display: flex;
+		gap: 15px;
+		font-size: 0.85em;
+		color: #666;
+	}
+	
+	.brief-actions {
+		display: flex;
+		gap: 10px;
+		flex-shrink: 0;
+	}
+	
+	.brief-preview-button {
+		background: #28a745;
+		color: white;
+		border: none;
+		width: 42px;
+		height: 42px;
+		border-radius: 8px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.2em;
+		transition: all 0.3s ease;
+		flex-shrink: 0;
+	}
+	
+	.brief-preview-button:hover:not(:disabled) {
+		background: #218838;
+		transform: scale(1.05);
+	}
+	
+	.brief-preview-button:disabled {
+		background: #ccc;
+		cursor: not-allowed;
+		transform: none;
+	}
+	
+	.brief-download-button {
+		background: #1e3c72;
+		color: white;
+		border: none;
+		width: 42px;
+		height: 42px;
+		border-radius: 8px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.2em;
+		transition: all 0.3s ease;
+		flex-shrink: 0;
+	}
+	
+	.brief-download-button:hover:not(:disabled) {
+		background: #2a5298;
+		transform: scale(1.05);
+	}
+	
+	.brief-download-button:disabled {
+		background: #ccc;
+		cursor: not-allowed;
+		transform: none;
 	}
 </style>

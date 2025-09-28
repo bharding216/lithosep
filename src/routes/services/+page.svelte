@@ -166,12 +166,8 @@
 		<h2>Additional Consulting Services</h2>
 		<div class="additional-grid">
 			<div class="additional-item">
-				<h4>Project Management</h4>
-				<p>End-to-end project execution from planning to completion</p>
-			</div>
-			<div class="additional-item">
-				<h4>Regulatory Support</h4>
-				<p>Permitting, compliance, and regulatory navigation</p>
+				<h4>Long-term strategic planning & business development</h4>
+				<p>Field Development Plans (FDP) & Redevelopment for Optimization</p>
 			</div>
 			<div class="additional-item">
 				<h4>Risk Assessment</h4>
@@ -186,8 +182,8 @@
 				<p>Staff training and capability development programs</p>
 			</div>
 			<div class="additional-item">
-				<h4>Strategic Planning</h4>
-				<p>Long-term strategic planning and business development</p>
+				<h4>End-to-end project execution</h4>
+				<p>End-to-end project execution from planning to completion to production</p>
 			</div>
 		</div>
 	</div>

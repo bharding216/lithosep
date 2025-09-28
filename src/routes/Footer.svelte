@@ -33,8 +33,8 @@
             <div class="footer-section">
                 <h4>Resources</h4>
                 <ul class="footer-links">
-                    <li><a href="/resources">Publications</a></li>
-                    <li><a href="/resources">Applications</a></li>
+                    <li><a href="/resources#strategy-briefs">Strategy Briefs</a></li>
+                    <li><a href="/resources#applications">Programs & Applications</a></li>
                     <li><a href="/about">About Us</a></li>
                     <li><a href="/inquire">Contact</a></li>
                 </ul>
@@ -65,7 +65,7 @@
 
 <style>
   footer {
-    background: linear-gradient(135deg, #020277 0%, #305088 100%);
+    background: linear-gradient(135deg, #001155 0%, #1a3366 100%);
     color: white;
     margin-top: 60px;
   }

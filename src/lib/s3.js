@@ -1,5 +1,4 @@
-import { S3Client, GetObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { S3Client, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import { env } from '$env/dynamic/private';
 
 // Initialize S3 client
@@ -11,57 +10,6 @@ const s3Client = new S3Client({
 	},
 });
 
-/**
- * Generate a presigned URL for an S3 object
- * @param {string} bucket - S3 bucket name
- * @param {string} key - S3 object key (file path)
- * @param {number} expiresIn - URL expiration time in seconds (default: 1 hour)
- * @returns {Promise<string>} Presigned URL
- */
-export async function generatePresignedUrl(bucket, key, expiresIn = 3600) {
-	try {
-		const command = new GetObjectCommand({
-			Bucket: bucket,
-			Key: key,
-		});
-
-		const presignedUrl = await getSignedUrl(s3Client, command, {
-			expiresIn,
-		});
-
-		return presignedUrl;
-	} catch (error) {
-		console.error('Error generating presigned URL:', error);
-		throw new Error(`Failed to generate presigned URL: ${error.message}`);
-	}
-}
-
-/**
- * Generate presigned URLs for multiple S3 objects
- * @param {string} bucket - S3 bucket name
- * @param {string[]} keys - Array of S3 object keys
- * @param {number} expiresIn - URL expiration time in seconds (default: 1 hour)
- * @returns {Promise<Object>} Object with keys mapped to presigned URLs
- */
-export async function generateMultiplePresignedUrls(bucket, keys, expiresIn = 3600) {
-	try {
-		const urlPromises = keys.map(async (key) => {
-			const url = await generatePresignedUrl(bucket, key, expiresIn);
-			return { key, url };
-		});
-
-		const results = await Promise.all(urlPromises);
-		
-		// Convert array to object for easier access
-		return results.reduce((acc, { key, url }) => {
-			acc[key] = url;
-			return acc;
-		}, {});
-	} catch (error) {
-		console.error('Error generating multiple presigned URLs:', error);
-		throw new Error(`Failed to generate multiple presigned URLs: ${error.message}`);
-	}
-}
 
 /**
  * Extract image key from full S3 URL
@@ -129,6 +77,30 @@ export async function listS3Objects(bucket, prefix = '') {
 		console.error('Error listing S3 objects:', error);
 		throw new Error(`Failed to list S3 objects: ${error.message}`);
 	}
+}
+
+/**
+ * Generate direct S3 URL for public content
+ * @param {string} bucket - S3 bucket name
+ * @param {string} key - S3 object key (file path)
+ * @returns {string} Direct S3 URL
+ */
+export function generateDirectS3Url(bucket, key) {
+	const region = env.AWS_REGION || 'us-east-2';
+	return `https://${bucket}.s3.${region}.amazonaws.com/${encodeURIComponent(key)}`;
+}
+
+/**
+ * Generate direct S3 URLs for multiple objects
+ * @param {string} bucket - S3 bucket name
+ * @param {string[]} keys - Array of S3 object keys
+ * @returns {Object} Object with keys mapped to direct S3 URLs
+ */
+export function generateMultipleDirectS3Urls(bucket, keys) {
+	return keys.reduce((acc, key) => {
+		acc[key] = generateDirectS3Url(bucket, key);
+		return acc;
+	}, {});
 }
 
 /**

@@ -32,25 +32,9 @@
 					// Only preload the first image of each project to avoid overwhelming the network
 					const firstImage = project.images[0];
 					try {
-						const response = await fetch('/api/presigned-url', {
-							method: 'POST',
-							headers: { 'Content-Type': 'application/json' },
-							body: JSON.stringify({
-								imageUrl: firstImage.startsWith('http') ? firstImage : undefined,
-								bucket: firstImage.startsWith('http') ? undefined : 'lithos-ep',
-								key: firstImage.startsWith('http') ? undefined : firstImage,
-								expiresIn: 3600
-							})
-						});
-						
-						const data = await response.json();
-						if (data.success && typeof window !== 'undefined' && window.__s3ImageCache) {
-							const cacheKey = `lithos-ep:${firstImage}`;
-							window.__s3ImageCache.set(cacheKey, {
-								url: data.url,
-								expires: Date.now() + (3600 - 300) * 1000
-							});
-						}
+						// Since images are now direct URLs, we can preload them directly
+						const img = new Image();
+						img.src = firstImage; // Images are already full URLs
 					} catch (error) {
 						// Silently handle preload failures
 					}
@@ -289,7 +273,7 @@
 					<div class="project-content">
 						<button class="project-header" on:click={() => toggleProject(project.id)}>
 							<h3>{project.name}</h3>
-							<span class="expand-icon {expandedProject === project.id ? 'expanded' : ''}">▼</span>
+							<i class="fas fa-chevron-down expand-icon {expandedProject === project.id ? 'expanded' : ''}"></i>
 						</button>
 
 						<p class="project-description">{project.description}</p>
@@ -463,6 +447,7 @@
 	.expand-icon {
 		transition: transform 0.3s ease;
 		font-size: 1.2em;
+		margin-left: 10px;
 	}
 
 	.expand-icon.expanded {

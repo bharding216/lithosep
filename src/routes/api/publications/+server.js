@@ -6,10 +6,10 @@ export async function GET() {
 	try {
 		const bucket = 'lithos-ep';
 		
-		// Fetch journal articles and papers in parallel
+		// Fetch journal articles and technical papers in parallel
 		const [journalArticles, papers] = await Promise.all([
 			listS3Objects(bucket, 'publications/journal/'),
-			listS3Objects(bucket, 'publications/papers/')
+			listS3Objects(bucket, 'technical_papers/')
 		]);
 
 		// Sort by last modified date (newest first)
