@@ -155,9 +155,6 @@
             let message = formDataObj.get('message');
             let recaptchaResponse = recaptchaToken;
 
-            console.log('Submitting form to:', lambdaUrl);
-            console.log('Form data:', { name, email, phone, message, recaptchaToken: recaptchaResponse });
-
             const response = await fetch(lambdaUrl, {
                 method: 'POST',
                 headers: {
